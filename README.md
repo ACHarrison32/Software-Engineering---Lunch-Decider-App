@@ -1,4 +1,6 @@
 ## Software Engineering: Lunch Decider App
+### Team 4
+
 | Team Members |     Team Member Email     |
 | ------------ | ------------------------- |
 | Dylan Miles  | DylanBMiles@gmail.com     |
@@ -6,3 +8,4 @@
 | Ashton Webb  | AshtonWebb46@gmail.com    |
 | Keaton Whitaker| WhitKeaton@gmail.com    |
 | Andrew Harrison| ACHarrison1123@gmail.com|
+
