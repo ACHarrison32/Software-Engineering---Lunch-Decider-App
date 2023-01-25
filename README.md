@@ -1,11 +1,11 @@
 ## Software Engineering: Lunch Decider App
 ### Team 4
 
-| Team Members |     Team Member Email     |
-| ------------ | ------------------------- |
-| Dylan Miles  | DylanBMiles@gmail.com     |
-| Sunil Rasaily| SunilRasaily02@gmail.com  |
-| Ashton Webb  | AshtonWebb46@gmail.com    |
-| Keaton Whitaker| WhitKeaton@gmail.com    |
-| Andrew Harrison| ACHarrison1123@gmail.com|
+|           Menu            |            Description            |
+| ------------------------- | --------------------------------- |
+|[About The App](./App_Info)| Information about what the app is |
+|[About Us](./About_Us)     | Information about the team members|
+|[Documentation](./Documentation)| All Documents related        |
+|[Coding](./Coding)         | All Coding related information    |
+
 
