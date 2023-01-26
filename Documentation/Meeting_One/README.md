@@ -1,4 +1,4 @@
-# Creating Android App instead of Iphone App.
+#### Creating Android App instead of Iphone App.
 # Talked about using different datasets from either yelp, google, etc… 
 # Possibly use a wheel to determine choice.
 # Electron App?
