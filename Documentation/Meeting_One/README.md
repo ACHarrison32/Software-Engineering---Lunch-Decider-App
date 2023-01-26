@@ -1,8 +1,8 @@
-Creating Android App instead of Iphone App
-Talked about using different datasets from either yelp, google, etc… 
-Possibly use a wheel to determine choice.
-Electron App?
-Who’s talking to Dr. Lopamudra Roychoudhuri: Dylan Miles
+#Creating Android App instead of Iphone App.
+#Talked about using different datasets from either yelp, google, etc… 
+#Possibly use a wheel to determine choice.
+#Electron App?
+#Who’s talking to Dr. Lopamudra Roychoudhuri: Dylan Miles
 						                                 Andrew Harrison
 
 Questions
