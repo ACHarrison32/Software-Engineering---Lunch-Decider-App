@@ -14,4 +14,8 @@ Questions
   a feature where you can select how many return options you would like.
 - What should the app be doing after selecting the restaurant? Example: Pulls up a link to the restaurant
   for you to look at the menu, reviews, location, etc...
-
+- should it work city wide, statewide, world wide?
+- who are the user's?
+- why do you want this?
+- where do you want us to grab sources from?
+- Should we have a spin by favorite?
