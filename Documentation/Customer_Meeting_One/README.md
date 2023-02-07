@@ -3,6 +3,9 @@
 ## Who is the customer
 Our customer said to think of her as Yelp, and that they want us to make an app for them.
 
+## Process Model
+We discussed using the prototype method which would have us build a prototype and represent it. Then she would put her inputs and changes and we would re do the protoype to fit their needs over and over.
+
 ## Platform and language
 We decided on making the application on Android. We also talked about how once we are finished with the Android app we could possibly make it web based as well. The customer did not have any preferance on what language we used. We decided it would be best to use Java for the applciation.
 
