@@ -1,6 +1,7 @@
-## Platform
-### First Customer Meeting
+# First Customer Meeting
 
+
+## Platform
 We decided on making the application on Android. We also talked about how once we are finished with the Android app we could possibly make it web based as well.
 
 ## Design
