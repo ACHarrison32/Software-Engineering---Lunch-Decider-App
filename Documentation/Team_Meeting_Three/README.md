@@ -1,6 +1,14 @@
 # Team Meeting #3
 
 ## Agenda
+|       Main Topic      |                  What To Do                   |       Date      |
+| --------------------- | --------------------------------------------- | --------------- |
+| Requirements Document | Compare and Discuss Requirements for document 
+                          Create Requirements document                  | DUE: 02/17/2023 |
+
+
+
+
 •	Requirements Document | DUE: 02/17/2023
     o	Compare and Discuss Requirements for document
     o	Create Requirements document 
