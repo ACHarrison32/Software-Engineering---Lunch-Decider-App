@@ -3,7 +3,7 @@
 ## Agenda
 |       Main Topic      |                  What To Do                   |       Date      |
 | --------------------- | --------------------------------------------- | --------------- |
-| Requirements Document | Compare and Discuss Requirements for document and Create Requirements document | DUE: 02/17/2023 |
+| Requirements Document | Compare and Discuss Requirements for document                                                                                                                             Create Requirements document | DUE: 02/17/2023 |
 
 
 
