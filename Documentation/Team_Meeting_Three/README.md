@@ -1,27 +1,11 @@
 # Team Meeting #3
 
 ## Agenda
-|       Main Topic      |                  What To Do                   |       Date      |
-| --------------------- | --------------------------------------------- | --------------- |
-| Requirements Document | Compare and Discuss Requirements for document                                                                                                                             Create Requirements document | DUE: 02/17/2023 |
-
-
-
-
-•	Requirements Document | DUE: 02/17/2023
-    o	Compare and Discuss Requirements for document
-    o	Create Requirements document 
-•	Use Case Diagram | DUE: 02/17/2023
-    o	Discuss use case diagram
-    o	Create use case diagram
-•	App Sketches/ Logo Sketches | BY: 02/17/2023
-    o	Discuss Sketches
-    o	Finish sketches
-•	Schedule | DUE: 02/17/2023
-    o	Discuss schedule
-    o	Edit any new information or make necessary changes 
-•	Customer Meeting #2 | Takes Place: 02/22/2023 @2:30pm
-    o	Discuss Who will be going
-    o	Discuss What will be discussed
-•	Task Division
-    o	Discuss about splitting tasks up among team members
+|       Main Topic      |                                     What To Do                                 |       Date      |
+| --------------------- | ------------------------------------------------------------------------------ | --------------- |
+| Requirements Document | Compare and Discuss Requirements for document and Create Requirements document | DUE: 02/17/2023 |
+|    Use Case Diagram   |                         Discuss and Create Use Case Diagram                    | DUE: 02/17/2023 |
+| App and Logo Sketches |                      Discuss and Finish App and Logo sketches                  | BY:  02/17/2023 |
+|       Schedule        |   Discuss the semester schedule. Make necessary changes and edit the schedule  | DUE: 02/17/2023 |
+|  Customer Meeting #2  |  Discuss who will be going to the meeting as well as what should be discussed  | TP:  02/22/2023 |
+|     Task Division     |         Discuss about how we should split tasks up among the team members      |   NO DUE DATE   |
