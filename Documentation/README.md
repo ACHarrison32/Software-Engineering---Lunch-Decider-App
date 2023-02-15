@@ -9,3 +9,4 @@
 |02/17/2023| Draft of the UID Display  | [UID Display Draft](./UID_Display_Draft)     |
 |02/17/2023| Use Case Diagram          | [Use Case Diagram](./Use_Case_Diagram)       |
 |02/17/2023| Schedule of entire project| [Schedule](./Schedule)                       |
+|02/17/2023| Final Project Plan        | [Final Project Plan](./Final_Project_Plan)   |
