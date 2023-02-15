@@ -6,5 +6,5 @@
 |02/07/2023| App and Logo Sketches     | [Sketches](./Sketches)                       |
 |02/15/2023| Meeting 3: Sketches, Logo, and more |[Team Meeting Three](./Team_Meeting_Three)|
 |02/17/2022| Requirements Document     |[Requirements Document]|(./Requirements_Document)|
-|          |                           |                                              |
+|           |                           |                                              |
 |          |                           |                                              |
