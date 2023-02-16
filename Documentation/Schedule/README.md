@@ -10,8 +10,8 @@
 |   Final Project Plan  |	02/15/2023 – 02/17/2023	| AH	|In Progress|
 |   UID Displays Draft  |	02/07/2023 – 02/17/2023	| KW	|In Progress|
 | Requirements Document |	02/15/2023 – 02/17/2023	| AW	|In Progress|
-| Use Case Diagram	    | 02/15/2023 – 02/17/2023	AH, KW	|In Progress|
-| User Display Coded    | 02/15/2023 – 02/24/2023	DM	|No|
+| Use Case Diagram	    | 02/15/2023 – 02/17/2023	|AH, KW	|In Progress|
+| User Display Coded    | 02/15/2023 – 02/24/2023	|DM	|No|
 | Customer Meeting #2	  |02/22/2023	|AH, DM, KW	|No|
 | Team Meeting #4|	02/22/2023|	AH, AW, DM, KW, SR	|No|
 | Final Report	|02/22/2023 – 04/21/2023|	AH, AW, DM, KW, SR|	No|
