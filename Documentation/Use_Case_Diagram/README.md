@@ -1,1 +1,1 @@
-<img src="https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Sketches/Andrew's_Logo_Sketches/20230207_235501.png" width="750">
+<img src="https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Use_Case_Diagram/Use%20Case.jpg" width="500">
