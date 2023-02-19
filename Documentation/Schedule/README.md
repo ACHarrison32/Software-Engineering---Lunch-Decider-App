@@ -10,7 +10,7 @@
 |   Final Project Plan  |	02/15/2023 – 02/17/2023	| AH	|In Progress|
 |   [UID Displays Draft](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/UID_Display_Draft)  |	02/07/2023 – 02/17/2023	| KW	|In Progress|
 | [Requirements Document](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Requirements%20Document.pdf) |	02/15/2023 – 02/17/2023	| AW, AH|Yes|
-| Use Case Diagram	    | 02/15/2023 – 02/17/2023	|AH, KW	|In Progress|
+| [Use Case Diagram](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Use_Case_Diagram)	    | 02/15/2023 – 02/17/2023	|AH|Yes|
 | User Display Coded    | 02/15/2023 – 02/24/2023	|DM	|No|
 | Customer Meeting #2	  |02/22/2023	|AH, DM, KW	|No|
 | Team Meeting #4|	02/22/2023|	AH, AW, DM, KW, SR	|No|
