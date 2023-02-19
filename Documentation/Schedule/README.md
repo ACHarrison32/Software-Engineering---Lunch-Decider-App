@@ -3,7 +3,7 @@
 |    [Team Meeting #1](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Team_Meeting_One)    |	01/25/2023              | AH, AW, DM, KW, SR | Yes |
 |  [Customer Meeting #1](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Customer_Meeting_One)  |	02/06/2023              |AH, DM	|Yes|
 |    [Team Meeting #2](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Team_Meeting_Two)	  | 02/07/2023              | AH, AW, DM, KW, SR	|Yes|
-|   [App Sketches/Logo](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Sketches)   |	02/07/2023 – 02/21/2023 |	AH, AW, DM, KW, SR|	In Progress|
+|   [App Sketches/Logo](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Sketches)   |	02/07/2023 – 02/21/2023 |	AH,  DM, KW, SR|	Yes|
 |     Schedule Draft    |	02/10/2023 – 02/17/2023	| AH	|Yes|
 |    [Team Meeting #3](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Team_Meeting_Three)	  | 02/15/2023	            | AH, AW, DM, KW, SR	|Yes|
 |    Project Design	    | 02/15/2023 – 03/24/2023	| AH, AW, DM, KW, SR|	No|
