@@ -1,7 +1,7 @@
 |      Description      |           Date          | Members Assigned | Completed |
 | --------------------- | ----------------------- | ---------------- | --------- |
 |    [Team Meeting #1](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Team_Meeting_One)    |	01/25/2023              | AH, AW, DM, KW, SR | Yes |
-|  Customer Meeting #1  |	02/06/2023              |AH, DM	|Yes|
+|  [Customer Meeting #1](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Customer_Meeting_One)  |	02/06/2023              |AH, DM	|Yes|
 |    Team Meeting #2	  | 02/07/2023              | AH, AW, DM, KW, SR	|Yes|
 |   App Sketches/Logo   |	02/07/2023 – 02/21/2023 |	AH, AW, DM, KW, SR|	In Progress|
 |     Schedule Draft    |	02/10/2023 – 02/17/2023	| AH	|Yes|
