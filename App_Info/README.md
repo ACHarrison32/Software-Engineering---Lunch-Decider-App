@@ -30,3 +30,5 @@ prototype two, the team will start on prototype three. This will be the final
 prototype the team will complete. During this, the team will fix up any last details
 that failed to be completed in prototype two. Prototype three will then be delivered
 to the customer for use.
+
+If you would like to see more specific details about the application please feel free to check out the [Requirements Document]() and the [Final Proejct Plan]()
