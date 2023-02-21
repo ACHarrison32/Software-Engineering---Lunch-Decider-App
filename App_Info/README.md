@@ -31,4 +31,4 @@ prototype the team will complete. During this, the team will fix up any last det
 that failed to be completed in prototype two. Prototype three will then be delivered
 to the customer for use.
 
-If you would like to see more specific details about the application please feel free to check out the [Requirements Document](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Requirements%20Document.pdf) and the [Final Proejct Plan]()
+If you would like to see more specific details about the application please feel free to check out the [Requirements Document](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Requirements%20Document.pdf) and the [Final Proejct Plan](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Final%20Plan%20Document.pdf)
