@@ -40,7 +40,7 @@
 |Customer Meeting #6|	04/05/2023	|AH, AW, DM, KW, SR	|No|
 |Team Meeting #10|	04/05/2023	|AH, AW, DM, KW, SR	|No|
 |Test Plan and Tests Designed|	04/05/2023 – 04/07/2023|	DM, KW|	No|
-|Final Prototype|	04/05/2023 – 04/19/2023|	DM, KW, AW | AH, SR	|No|
+|Final Prototype|	04/05/2023 – 04/19/2023|	DM, KW, AW - AH, SR	|No|
 |Review Meeting|	04/20/2023	|AH, AW, DM, KW, SR	|No|
 |Final Tests	|04/05/2023 – 04/19/2023|	AH, DM, KW	|No|
 |User Manual Report|	04/05/2023 – 04/19/2023	|AH, SR - KW|	No|
