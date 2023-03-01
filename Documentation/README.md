@@ -9,6 +9,6 @@
 |02/17/2023| Draft of the UID Display  | [UID Display Draft](./UID_Display_Draft)     |
 |02/17/2023| Use Case Diagram          | [Use Case Diagram](./Use_Case_Diagram)       |
 |02/17/2023| Schedule of entire project| [Schedule](./Schedule)                       |
-|02/17/2023| Final Project Plan        | [Final Project Plan](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Final%20Plan%20Document.pdf)   |
+|02/17/2023| Final Project Plan        | [Final Project Plan](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Final%20Plan%20Doc.pdf)   |
 |02/22/2023| Customer Meeting #2       | [Customer Meeting Two](./Customer_Meeting_Two)|
 |02/22/2023| Team Meeting #4 (Review)  | [Team Meeting Four](./Team_Meeting_Four)       |
