@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
+    static int[] colors = {0XFFFF5733, 0XFFFFE633, 0XFF33FFA8, 0XFF33E5FF, 0XFFE533FF, 0XFFFF36D6, 0XFFDD3333, 0XFF33FF33};
+
     public static Drawable createPieChartDrawable(Context context, String[] strings) {
         int width = 500;
         int height = 500;
@@ -56,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         Random random = new Random();
 
         for (int i = 0; i < strings.length; i++) {
-            paint.setColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            //paint.setColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            paint.setColor(colors[i % 10]);
             canvas.drawArc(rectF, i * anglePerPartition, anglePerPartition, true, paint);
 
             Path path = new Path();
@@ -113,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
     public void spin(View view) {
         String[] roast = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
-        TextView textview2 = (TextView) this.findViewById(R.id.textView2);
-        textview2.setVisibility(View.VISIBLE);
+        //TextView textview2 = (TextView) this.findViewById(R.id.textView2);
+        //textview2.setVisibility(View.VISIBLE);
         int rotateAmount = ((int) (Math.random() * 360) + 420);
         ImageView refreshImage = (ImageView) this.findViewById(R.id.imageView2);
         //refreshImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.placeholder_wheel, null));
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         currentRotation = (currentRotation + rotateAmount) % 360;
         int segmentLength = (360/roast.length);
         int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), 8);
-        textview2.setText(roast[result-1]);
+        //textview2.setText(roast[result-1]);
         anim.setInterpolator(new LinearInterpolator());
         anim.setDuration(500);
         anim.setFillEnabled(true);
