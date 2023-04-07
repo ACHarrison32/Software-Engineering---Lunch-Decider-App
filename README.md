@@ -1,4 +1,4 @@
-## Software Engineering: Lunch Decider App
+## Software Engineering: Lunch Decider App!
 ### Team IV
 
 |           Menu            |            Description            |
