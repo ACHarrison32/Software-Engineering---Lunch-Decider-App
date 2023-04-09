@@ -1,3 +1,3 @@
-|[JAVA Code](./https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Coding/main/java/com/example/myapplication)|
+[JAVA Code](./https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Coding/main/java/com/example/myapplication)
 
-|[UI Code](./https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Coding/main/res/layout)|
+[UI Code](./https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Coding/main/res/layout)
