@@ -1,4 +1,10 @@
 # Lunch Roulette Application Navigation Diagram Review
+## Time for individual review:
+### • Andrew Harrison: 30 Minutes
+### • Ashton Webb: 15 Minutes
+### • Dylan Miles: 12 Minutes
+### • Keaton Whitaker: 18 Minutes
+### • Sunil Rasaily (Document Creator): 2+ Hours
 ## Timeline:
 ### • 7:00 PM: Start Meeting
 ### • 7:00 - 7:10 PM: Discussed what the diagram needed to be. Our first draft of the navigation diagram was not quite what was needed
