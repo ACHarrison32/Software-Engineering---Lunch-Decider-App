@@ -26,3 +26,5 @@
 ### • Decided to exclude from requirements document and keep them only in final project plan.
 ## Figure 1.0:
 ### • Discussed adding a description about the figure for better understanding
+
+### Meeeting Recorder: Sunil Rasaily
