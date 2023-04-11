@@ -39,8 +39,8 @@ public class Wheel {
 
     public Drawable createPieChartDrawable(Context context, String[] strings) {
 
-        int width = 800;
-        int height = 800;
+        int width = 650;
+        int height = 650;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
@@ -63,7 +63,7 @@ public class Wheel {
             path.addArc(rectF, i * anglePerPartition, anglePerPartition);
             paint.setColor(Color.BLACK);
             paint.setTextSize(30);
-            paint.setLetterSpacing(0.18f);
+            paint.setLetterSpacing(0.15f);
             paint.setTypeface(Typeface.SANS_SERIF);
             paint.setTextAlign(Paint.Align.CENTER);
             canvas.drawTextOnPath(strings[i], path, 0, height / 9f, paint);
