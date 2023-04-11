@@ -1,10 +1,10 @@
 # Lunch Roulette Application Final Project Plan Document Review
 ## Time for individual review: 
 ### • Andrew Harrison(Document Creator): 2+ Hours
-### • Ashton Webb: 25 Minutes
-### • Dylan Miles: 30 Minutes
-### • Keaton Whitaker: 18 Minutes
-### • Sunil Rasaily: 20 Minutes
+### • Ashton Webb: 33 Minutes
+### • Dylan Miles: 26 Minutes
+### • Keaton Whitaker: 31 Minutes
+### • Sunil Rasaily: 38 Minutes
 
 ## Timeline:
  ### • 6:45 PM: Start Meeting
