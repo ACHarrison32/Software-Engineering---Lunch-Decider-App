@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/beans"
     tools:context="us.four.lunchroulette.MainActivity">
 
     <ImageView
@@ -33,6 +34,7 @@
         android:layout_width="320dp"
         android:layout_height="415dp"
         android:clickable="true"
+        android:contentDescription="Roulette Wheel"
         android:focusable="auto"
         android:onClick="spin"
         app:layout_constraintEnd_toEndOf="parent"

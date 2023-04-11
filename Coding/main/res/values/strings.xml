@@ -1,3 +1,63 @@
 <resources>
     <string name="app_name">Lunch Decider</string>
+    <string name="filters_menu">Filters Menu</string>
+    <string name="food_type">Food Type</string>
+    <string name="restaurant_type">Restaurant Type</string>
+    <string name="price_range">Price Range</string>
+    <string name="rating">Rating</string>
+    <string name="distance">Distance</string>
+    <string name="create_list">Create List</string>
+    <string name="food_type_example">e.g. American, Italian, etc.</string>
+    <string name="restaurant_type_example">e.g. Sit-Down, Buffet, etc.</string>
+    <string name="price_range_example">e.g. $, $$, $$$, etc.</string>
+    <string name="rating_example">e.g. *, **, ***, etc.</string>
+    <string name="distance_example">e.g. 1 mi, 5 mi, 10 mi, etc.</string>
+    <string name="list_name">List Name:</string>
+    <string name="blank_text"> </string>
+    <string name="blank_text_example"> list1 </string>
+    <string name="hint"> Create List Name </string>
+
+    <string-array name="spinner_food_type">
+        <item> Any </item>
+        <item> American </item>
+        <item> Italian </item>
+        <item> Mexican </item>
+        <item> Asian </item>
+        <item> Vegetarian </item>
+        <item> Breakfast </item>
+        <item> BBQ </item>
+    </string-array>
+    <string-array name="spinner_restaurant_type">
+        <item> Any </item>
+        <item> Sit-Down </item>
+        <item> Fast Food </item>
+        <item> Buffet </item>
+        <item> Drive Through </item>
+        <item> Outdoors </item>
+    </string-array>
+    <string-array name="spinner_price_range">
+        <item> Any </item>
+        <item> 💲   </item>
+        <item> 💲💲  </item>
+        <item> 💲💲💲   </item>
+        <item> 💲💲💲💲 </item>
+    </string-array>
+    <string-array name="spinner_rating">
+        <item> Any </item>
+        <item> ⭐ </item>
+        <item> ⭐⭐ </item>
+        <item> ⭐⭐⭐ </item>
+        <item> ⭐⭐⭐⭐ </item>
+        <item> ⭐⭐⭐⭐⭐ </item>
+    </string-array>
+    <string-array name="spinner_distance">
+        <item> Any </item>
+        <item> less than 1 mile </item>
+        <item> less than 5 miles </item>
+        <item> less than 10 miles </item>
+        <item> less than 15 miles </item>
+        <item> less than 20 miles </item>
+        <item> less than 25 miles </item>
+        <item> less than 50 miles </item>
+    </string-array>
 </resources>

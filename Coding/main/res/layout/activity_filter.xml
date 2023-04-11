@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/beans"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="us.four.lunchroulette.FilterActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filters_menu"
+        android:textColor="@color/white"
+        android:textSize="40sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_name"
+            android:textSize="22sp"
+            android:textColor="@android:color/black"/>
+
+        <EditText
+            android:id="@+id/inputText"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:autofillHints="@string/hint"
+            android:hint="@string/hint" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/food_type"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinnerFoodType"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/food_type_example"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/restaurant_type"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinnerRestaurantType"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/restaurant_type_example" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/price_range"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinnerPriceRange"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/price_range_example" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/rating"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinnerRating"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/rating_example" />
+
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/distance"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/spinnerDistance"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/distance_example"/>
+
+        <Button
+            android:id="@+id/createList"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:outlineProvider="paddedBounds"
+            android:text="@string/create_list"
+            android:textSize="22sp"
+            android:backgroundTint="@color/black"/>
+    </LinearLayout>
+</LinearLayout>

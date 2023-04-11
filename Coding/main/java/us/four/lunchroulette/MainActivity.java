@@ -5,6 +5,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -58,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void filtersButton_Click(View view) {
-        Snackbar.make(findViewById(android.R.id.content), "Feature not yet implemented",
-                        Snackbar.LENGTH_SHORT)
-                .show();
+        Intent intent = new Intent("filters.intent.action.Launch");
+        startActivity(intent);
+//        Snackbar.make(findViewById(android.R.id.content), "Feature not yet implemented",
+//                        Snackbar.LENGTH_SHORT)
+//                .show();
 
     }
 
