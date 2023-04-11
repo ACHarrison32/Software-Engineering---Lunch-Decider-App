@@ -11,7 +11,7 @@
 |02/22/2023| Customer Meeting #2       | [Customer Meeting Two](./Customer_Meeting_Two)|
 |02/22/2023| Team Meeting #4   | [Team Meeting Four](./Team_Meeting_Four)       |
 |02/23/2023| Requirements Document Review | [Review Meeting One](./https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Review_Meeting_One)|
-|02/23/2023| Use Case Diagram Review | [Review Meeting Two](./https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/tree/main/Documentation/Review_Meeting_Two)
+|02/23/2023| Use Case Diagram Review | [Review Meeting Two](./https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Review_Meeting_Two/README.md)
 |02/27/2023 | Final Project Plan Document Review | [Review Meeting Three](./)|
 |03/01/2023| Objective Grading Meeting | [Team Meeting Five](./Team_Meeting_Five)      |
 |03/05/2023| Activity Diagram          | [Activity Diagram](https://github.com/ACHarrison32/Software-Engineering---Lunch-Decider-App/blob/main/Documentation/Final%20Draft%20Activity%20Diagram.drawio%20(1).pdf) |
