@@ -4,7 +4,7 @@
 ### • Ashton Webb: 15 Minutes
 ### • Dylan Miles: 12 Minutes
 ### • Keaton Whitaker: 18 Minutes
-### • Sunil Rasaily (Document Creator): 2+ Hours
+### • Sunil Rasaily (Diagram Creator): 2+ Hours
 ## Timeline:
 ### • 7:00 PM: Start Meeting
 ### • 7:00 - 7:10 PM: Discussed what the diagram needed to be. Our first draft of the navigation diagram was not quite what was needed
@@ -16,3 +16,4 @@
 ### • 7:20 - 7:21 PM: Added an arrow from “list” page and “spin wheel” page
 ### • 7:17 - 7:18 PM: End Meeting
 
+### Meeting Recorder: Ashton Webb
