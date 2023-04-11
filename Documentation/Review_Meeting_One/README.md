@@ -1,4 +1,11 @@
 # Lunch Roulette Application Requirements Document Review
+## Time for individual review:
+### • Andrew Harrison (Document Creator): 2+ Hours
+### • Ashton Webb: 25 Minutes
+### • Dylan Miles: 30 Minutes
+### • Keaton Whitaker: 18 Minutes
+### • Sunil Rasaily: 20 Minutes
+
 ## Timeline:
 ### • 9:30 PM: Team decides on app name - Lunch Roulette
 ### • 9:33 PM: Recreated scope for the requirements document
