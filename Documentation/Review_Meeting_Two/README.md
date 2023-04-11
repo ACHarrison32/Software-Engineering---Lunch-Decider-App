@@ -12,3 +12,4 @@
 ### • 9:57 - 10:02 PM: Decided to change the “Browse Review” use case name to “Browse Restaurant Info” to reflect its purpose better
 ### • 10:04 PM: End Meeting
 
+### Meeting Recorder: Sunil Rasaily
