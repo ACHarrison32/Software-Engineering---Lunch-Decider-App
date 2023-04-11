@@ -1,6 +1,6 @@
 # Lunch Roulette Application Use Case Diagram Review
 ## Time for individual review:
-### • Andrew Harrison (Document Creator): 1+ Hours
+### • Andrew Harrison (Diagram Creator): 1+ Hours
 ### • Ashton Webb: 9 Minutes
 ### • Dylan Miles: 8 Minutes
 ### • Keaton Whitaker: 11 Minutes
