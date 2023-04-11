@@ -31,31 +31,102 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.google.android.material.snackbar.Snackbar;
+import com.yelp.fusion.client.connection.YelpFusionApi;
+import com.yelp.fusion.client.connection.YelpFusionApiFactory;
+import com.yelp.fusion.client.models.Business;
+import com.yelp.fusion.client.models.SearchResponse;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Generate a response for the wheel
+        List<String> resturants = new ArrayList<>();
+        Context context = this;
+        YelpFusionApiFactory apiFactory = new YelpFusionApiFactory();
+        GPSTracker tracker = new GPSTracker(this);
+        if(tracker.canGetLocation) {
+            tracker.getLocation();
+            try {
+                YelpFusionApi yelpFusionApi = apiFactory.createAPI("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
+                Map<String, String> params = new HashMap<>();
+
+// general params
+                params.put("radius", "10000");
+                params.put("open_now", "true");
+                params.put("term", "food");
+                params.put("term", "lunch");
+                params.put("sort_by", "rating");
+                params.put("latitude", tracker.getLatitude() + "");
+                params.put("longitude", tracker.getLongitude() + "");
+
+                Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
+                Callback<SearchResponse> callback = new Callback<SearchResponse>() {
+                    @Override
+                    public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                        SearchResponse searchResponse = response.body();
+                        //System.out.println(searchResponse.getBusinesses().);
+                        for (Business b : searchResponse.getBusinesses()) {
+                            if(resturants.size() < 6)
+                                resturants.add(b.getName());
+                        }
+                        // Update UI text with the searchResponse.
+                       // workDone = true;
+
+
+                        //Get the wheel image view
+                        ImageView wheelImage = findViewById(R.id.imageView2);
+
+                        //string list to appear in the wheel
+                        //can be up to like 10 long, only limited by how many colors you give it
+                        //Any more than 6 and you risk having text spaceing issues
+                        String[] roast = resturants.toArray(new String[0]);
+
+
+
+                        //create an instance of the wheel object
+                        Wheel wheel = new Wheel(context, roast);
+                        //set our image displayed to the image made by the wheel class
+                        wheelImage.setImageDrawable(wheel.getImage());
+                        wheelImage.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<SearchResponse> call, Throwable t) {
+                        // HTTP error happened, do something to handle it.
+                    }
+                };
+                call.enqueue(callback);
+//               while(lock.size() == 0) {
+//                   Thread.sleep(10);
+//               }
+//                while(!workDone) {
+//                    Thread.sleep(5);
+//                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         //auto generated
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ImageView wheelImage = findViewById(R.id.imageView2);
+        wheelImage.setVisibility(View.INVISIBLE);
 
-        //Get the wheel image view
-        ImageView wheelImage = this.findViewById(R.id.imageView2);
-
-        //string list to appear in the wheel
-        //can be up to like 10 long, only limited by how many colors you give it
-        //Any more than 6 and you risk having text spaceing issues
-        String[] roast = {"Red Robin", "Chipotle", "McDonalds", "Qdoba", "Taco Bell", "Braums", "Pizza Hut", "Wendy's"};
-
-        //create an instance of the wheel object
-        Wheel wheel = new Wheel(this, roast);
-        //set our image displayed to the image made by the wheel class
-        wheelImage.setImageDrawable(wheel.getImage());
 
     }
     public void filtersButton_Click(View view) {
@@ -70,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
     int currentRotation = 0;
     @SuppressLint("UseCompatLoadingForDrawables")
     public void spin(View view) {
+
+
         //Commented out code was for showing the result of the spin
         //will likely be used later
 

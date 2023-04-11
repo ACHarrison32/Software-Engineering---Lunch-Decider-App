@@ -12,6 +12,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Wheel {
@@ -36,8 +38,9 @@ public class Wheel {
 
 
     public Drawable createPieChartDrawable(Context context, String[] strings) {
-        int width = 500;
-        int height = 500;
+
+        int width = 800;
+        int height = 800;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
@@ -63,7 +66,7 @@ public class Wheel {
             paint.setLetterSpacing(0.18f);
             paint.setTypeface(Typeface.SANS_SERIF);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawTextOnPath(strings[i], path, 0, height / 8f, paint);
+            canvas.drawTextOnPath(strings[i], path, 0, height / 9f, paint);
         }
         Bitmap bitmap2 = this.rotateBitmap180(bitmap);
         BitmapDrawable werg = new BitmapDrawable(context.getResources(), bitmap2);
