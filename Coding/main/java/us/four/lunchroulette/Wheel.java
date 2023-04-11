@@ -16,8 +16,7 @@ import java.util.Random;
 
 public class Wheel {
 
-    private final int[] defaultColors = {0XFFFF5733, 0XFFFFE633, 0XFF33FFA8, 0XFF33E5FF, 0XFFE533FF, 0XFFFF36D6, 0XFFDD3333, 0XFF33FF33};
-
+	private final int[] defaultColors = new int[] {0xFFFF7F50, 0xFFFFA500, 0xFFFFC0CB, 0xFFFF1493, 0xFFFF00FF, 0xFF00FFFF, 0xFF00FF7F, 0xFFFFFF00, 0xFFFFD700};
 
     private String[] entries;
     private int[] colors = defaultColors;
@@ -53,16 +52,18 @@ public class Wheel {
         for (int i = 0; i < strings.length; i++) {
             //paint.setColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
             paint.setColor(colors[i % 10]);
+            if(i == strings.length-1)
+                paint.setColor(colors[colors.length-1]);
             canvas.drawArc(rectF, i * anglePerPartition, anglePerPartition, true, paint);
 
             Path path = new Path();
             path.addArc(rectF, i * anglePerPartition, anglePerPartition);
             paint.setColor(Color.BLACK);
             paint.setTextSize(30);
-            paint.setLetterSpacing(0.5f);
-            paint.setTypeface(Typeface.DEFAULT_BOLD);
+            paint.setLetterSpacing(0.18f);
+            paint.setTypeface(Typeface.SANS_SERIF);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawTextOnPath(strings[i], path, 0, height / 4f, paint);
+            canvas.drawTextOnPath(strings[i], path, 0, height / 8f, paint);
         }
         Bitmap bitmap2 = this.rotateBitmap180(bitmap);
         BitmapDrawable werg = new BitmapDrawable(context.getResources(), bitmap2);

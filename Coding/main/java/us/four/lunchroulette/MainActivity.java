@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         //string list to appear in the wheel
         //can be up to like 10 long, only limited by how many colors you give it
-        //you probably shouldn't put more than 8 though
-        String[] roast = {"Red Robin", "Chipotle", "McDonalds", "Qdoba"};
+        //Any more than 6 and you risk having text spaceing issues
+        String[] roast = {"Red Robin", "Chipotle", "McDonalds", "Qdoba", "Taco Bell", "Braums", "Pizza Hut", "Wendy's"};
 
         //create an instance of the wheel object
         Wheel wheel = new Wheel(this, roast);
