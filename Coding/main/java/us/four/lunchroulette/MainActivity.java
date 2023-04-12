@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Context context = this;
         YelpFusionApiFactory apiFactory = new YelpFusionApiFactory();
         GPSTracker tracker = new GPSTracker(this);
-        if(tracker.canGetLocation) {
+        if(tracker.isGPSEnabled) {
             tracker.getLocation();
             try {
                 YelpFusionApi yelpFusionApi = apiFactory.createAPI("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
@@ -71,9 +71,10 @@ public class MainActivity extends AppCompatActivity {
                 params.put("term", "food");
                 params.put("term", "lunch");
                 params.put("sort_by", "rating");
-                params.put("latitude", tracker.getLatitude() + "");
-                params.put("longitude", tracker.getLongitude() + "");
-
+                //params.put("latitude", tracker.getLatitude() + "");
+                //params.put("longitude", tracker.getLongitude() + "");
+                params.put("latitude", "33.9788691");
+                params.put("longitude", "-98.5391547");
                 Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
                 Callback<SearchResponse> callback = new Callback<SearchResponse>() {
                     @Override

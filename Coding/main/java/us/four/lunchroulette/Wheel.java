@@ -39,8 +39,8 @@ public class Wheel {
 
     public Drawable createPieChartDrawable(Context context, String[] strings) {
 
-        int width = 650;
-        int height = 650;
+        int width = 700;
+        int height = 700;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
@@ -50,10 +50,8 @@ public class Wheel {
 
         RectF rectF = new RectF(0, 0, width, height);
         float anglePerPartition = 360f / strings.length;
-        Random random = new Random();
 
         for (int i = 0; i < strings.length; i++) {
-            //paint.setColor(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));
             paint.setColor(colors[i % 10]);
             if(i == strings.length-1)
                 paint.setColor(colors[colors.length-1]);
@@ -62,11 +60,52 @@ public class Wheel {
             Path path = new Path();
             path.addArc(rectF, i * anglePerPartition, anglePerPartition);
             paint.setColor(Color.BLACK);
-            paint.setTextSize(30);
+            paint.setTextSize(28);
             paint.setLetterSpacing(0.15f);
             paint.setTypeface(Typeface.SANS_SERIF);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawTextOnPath(strings[i], path, 0, height / 9f, paint);
+            //canvas.drawText(strings[i], 0, height / 9f, paint);
+            if(strings[i].length() > 17) {
+                String[] split = strings[i].split(" ");
+                List<String> temp = new ArrayList<>();
+                int index = 0;
+                temp.add("");
+                int lines = 0;
+                for(String s : split) {
+                    System.out.println(s);
+                    if((temp.get(index) + s).length() < (15 - (lines*1.5))) {
+                        temp.set(index, temp.get(index) + " " + s);
+                    } else {
+                        temp.add(s);
+                        index++;
+                    }
+                    lines++;
+                }
+//                for(int l = 0; l < split.length; l++) {
+//
+//                    l++;
+//                }
+                split = temp.toArray(new String[0]);
+                System.out.println(temp.size() + " " + split.length);
+                int yoff = 0;
+                float hoff = 10f;
+                for(String s : split) {
+                   if(yoff == 0)
+                       hoff = 10;
+                   if(yoff == 1)
+                       hoff = 7;
+                   if(yoff == 2)
+                       hoff = 5.4f;
+                   if(yoff == 3)
+                       hoff = 4.4f;
+                    if(yoff == 4)
+                        hoff = 3.7f;
+                    paint.setLetterSpacing((0.15f + (0.12f * yoff)));
+                    canvas.drawTextOnPath(s, path, 0, height / hoff, paint);
+                    yoff++;
+                }
+            } else
+                canvas.drawTextOnPath(strings[i], path, 0, height / 10f, paint);
         }
         Bitmap bitmap2 = this.rotateBitmap180(bitmap);
         BitmapDrawable werg = new BitmapDrawable(context.getResources(), bitmap2);
