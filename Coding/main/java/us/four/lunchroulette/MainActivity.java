@@ -1,36 +1,18 @@
 package us.four.lunchroulette;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.google.android.material.snackbar.Snackbar;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
@@ -42,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,39 +35,47 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO: Fix android permissions not allowing network by default
-        //Generate a response for the wheel
-        List<String> resturants = new ArrayList<>();
+        //List of resturants that will be pulled from Yelp
+        List<String> restaurants = new ArrayList<>();
+        //Grab current context so the concurrent part can reference it
         Context context = this;
+        //instance of Yelp Fusion api factory
         YelpFusionApiFactory apiFactory = new YelpFusionApiFactory();
+        //Access GPS from the user.
+        //TODO: Fallback method if this doesn't work, allow ZIP input
         GPSTracker tracker = new GPSTracker(this);
-        if(tracker.isGPSEnabled) {
+        if(tracker.canGetLocation) {
             tracker.getLocation();
             try {
+                //This API key is limited in requests per day, but scales in load if we get more users and contact yelp
+                //TODO: Maybe store this key in a file? Or even in a remote server so it can be changed and is harder to datamine
                 YelpFusionApi yelpFusionApi = apiFactory.createAPI("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
+               //HashMap for Yelp parameters
                 Map<String, String> params = new HashMap<>();
 
-                // general params
+                // general placeholder params, good for a default startup screen
                 params.put("radius", "10000");
                 params.put("open_now", "true");
                 params.put("term", "food");
-                params.put("term", "lunch");
                 params.put("sort_by", "rating");
                 //params.put("latitude", tracker.getLatitude() + "");
                 //params.put("longitude", tracker.getLongitude() + "");
+
+                //For testing, use predefined coords. For production, get user GPS.
                 params.put("latitude", "33.9788691");
                 params.put("longitude", "-98.5391547");
+                //call yelp api async (no networking on main thread allowed)
+
                 Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
                 Callback<SearchResponse> callback = new Callback<SearchResponse>() {
                     @Override
                     public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                         SearchResponse searchResponse = response.body();
-                        //System.out.println(searchResponse.getBusinesses().);
                         for (Business b : searchResponse.getBusinesses()) {
-                            if(resturants.size() < 6)
-                                resturants.add(b.getName());
+                            //we only want to add about 6 resturants.
+                            if(restaurants.size() < 6)
+                                restaurants.add(b.getName());
                         }
-                        // Update UI text with the searchResponse.
-                       // workDone = true;
 
 
                         //Get the wheel image view
@@ -94,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
                         //string list to appear in the wheel
                         //can be up to like 10 long, only limited by how many colors you give it
-                        //Any more than 6 and you risk having text spaceing issues
-                        String[] roast = resturants.toArray(new String[0]);
+                        //Any more than 6 and you risk having text spacing issues
+                        String[] roast = restaurants.toArray(new String[0]);
 
 
 
@@ -103,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         Wheel wheel = new Wheel(context, roast);
                         //set our image displayed to the image made by the wheel class
                         wheelImage.setImageDrawable(wheel.getImage());
+                        //we only want to show the wheel image after its been created
                         wheelImage.setVisibility(View.VISIBLE);
                     }
 
@@ -112,40 +102,39 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 call.enqueue(callback);
-//               while(lock.size() == 0) {
-//                   Thread.sleep(10);
-//               }
-//                while(!workDone) {
-//                    Thread.sleep(5);
-//                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        //auto generated
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Can't enable wheel image until after content view is set
         ImageView wheelImage = findViewById(R.id.imageView2);
         wheelImage.setVisibility(View.INVISIBLE);
 
 
     }
     public void filtersButton_Click(View view) {
+        //open Filters activity
         Intent intent = new Intent("filters.intent.action.Launch");
         startActivity(intent);
-//        Snackbar.make(findViewById(android.R.id.content), "Feature not yet implemented",
-//                        Snackbar.LENGTH_SHORT)
-//                .show();
 
     }
 
-    int currentRotation = 0;
+    //seperate rotation int to be stored
+    //helps with animation smoothness, wheel spins again from its previous rotation
+    private int currentRotation = 0;
     @SuppressLint("UseCompatLoadingForDrawables")
     public void spin(View view) {
 
 
         //Commented out code was for showing the result of the spin
-        //will likely be used later
+        //WILL BE USED LATER
+
+        //IMPORTANT!! WE DON'T CHOOSE A RANDOM RESTURANT FROM THE SPIN
+        //INSTEAD WE CHOOSE A RANDOM ROTATION
+        //FROM THERE WE USE MATH TO FIND THE RESTURANT
+        //FOR EXAMPLE: WHICH RESTURANT IS 790 DEGREES OF ROTATION?
 
         //String[] roast = wheel.getEntries();
 
@@ -153,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         //textview2.setVisibility(View.VISIBLE);
 
         //determines how much the wheel should spin
-        //since the animation only takes 500ms, more angle means a faster spin
+        //since the animation only takes 1000ms, more angle means a faster spin
         int rotateAmount = ((int) (Math.random() * 360) + 720);
         //grab the imageview of our wheel
         ImageView refreshImage = this.findViewById(R.id.imageView2);
@@ -164,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         currentRotation = (currentRotation + rotateAmount) % 360;
 
         //used for getting the result
+        //crazy math :)
         //int segmentLength = (360/roast.length);
         //int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), 8);
         //textview2.setText(roast[result-1]);

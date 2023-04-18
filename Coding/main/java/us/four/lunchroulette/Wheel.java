@@ -14,45 +14,63 @@ import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Wheel {
 
+    //Default list of colors that will make up each segment of the wheel
 	private final int[] defaultColors = new int[] {0xFFFF7F50, 0xFFFFA500, 0xFFFFC0CB, 0xFFFF1493, 0xFFFF00FF, 0xFF00FFFF, 0xFF00FF7F, 0xFFFFFF00, 0xFFFFD700};
-
-    private String[] entries;
+    //colors int, may be overridden from defaultColors by another constructor
     private int[] colors = defaultColors;
+    //List of string entries, for the purposes of this app's implementation that means resturants.
+    private final String[] entries;
+    //The Android Drawable object (image) that this function returns.
     private Drawable image = null;
 
+    //default constructor, contains the app graphics context and a string list of entries
     public Wheel(Context context, String[] entries) {
         this.entries = entries;
         this.colors = defaultColors;
         this.image = this.createPieChartDrawable(context, entries);
     }
 
+    //Overloaded constructor to specify wheel color.
     public Wheel(Context context, String[] entries, int[] colors) {
         this.entries = entries;
         this.colors = colors;
         this.image = this.createPieChartDrawable(context, entries);
     }
 
-
-    public Drawable createPieChartDrawable(Context context, String[] strings) {
-
+    //Input: Graphics Context, list of strings.
+    //Returns: Drawable of a pie chart
+    private Drawable createPieChartDrawable(Context context, String[] strings) {
+        //sets resolution
+        //should be square for this application
+        //keep in mind, android will rescale to whatever is set in the activity xml
         int width = 700;
         int height = 700;
+
+        //Create image bitmap and canvas
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
+        //we're gonna paint on it
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
-
+        //rectangle spanning the image
         RectF rectF = new RectF(0, 0, width, height);
+        //the number of degrees of one segment of the pie chart. Depends on string length.
         float anglePerPartition = 360f / strings.length;
 
         for (int i = 0; i < strings.length; i++) {
-            paint.setColor(colors[i % 10]);
+            //if we have enough defined colors
+            if(i < colors.length) {
+                //set the segment color depending on which string this is
+                paint.setColor(colors[i % 10]);
+            } else {
+                //if we run out of colors, default to black
+                paint.setColor(0XFF000000);
+            }
             if(i == strings.length-1)
                 paint.setColor(colors[colors.length-1]);
             canvas.drawArc(rectF, i * anglePerPartition, anglePerPartition, true, paint);
