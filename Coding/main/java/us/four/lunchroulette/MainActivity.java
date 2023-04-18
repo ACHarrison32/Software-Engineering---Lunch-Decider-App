@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        //TODO: Fix android permissions not allowing network by default
         //Generate a response for the wheel
         List<String> resturants = new ArrayList<>();
         Context context = this;
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 YelpFusionApi yelpFusionApi = apiFactory.createAPI("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
                 Map<String, String> params = new HashMap<>();
 
-// general params
+                // general params
                 params.put("radius", "10000");
                 params.put("open_now", "true");
                 params.put("term", "food");

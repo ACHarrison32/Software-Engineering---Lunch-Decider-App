@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/beans"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="us.four.lunchroulette.FilterActivity">
@@ -15,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/filters_menu"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="40sp" />
 
     <LinearLayout
@@ -125,6 +124,7 @@
             android:layout_height="60dp"
             android:outlineProvider="paddedBounds"
             android:text="@string/create_list"
+            android:textColor="@color/white"
             android:textSize="22sp"
             android:backgroundTint="@color/black"/>
     </LinearLayout>
