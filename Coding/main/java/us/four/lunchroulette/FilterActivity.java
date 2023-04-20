@@ -45,6 +45,7 @@ public class FilterActivity extends AppCompatActivity {
         spinnerDistance = findViewById(R.id.spinnerDistance);
         spinnerCurrentList = findViewById(R.id.currentFilterSpinner);
         Button createList = findViewById(R.id.createList);
+        Button deleteFilter = findViewById(R.id.deleteFilter);
 
         populateSpinnerFoodType();
         populateSpinnerRestaurantType();
@@ -65,6 +66,7 @@ public class FilterActivity extends AppCompatActivity {
         populateSpinnerCurrentFilter();
 
         createList.setOnClickListener(this::makeList);
+        deleteFilter.setOnClickListener(this::deleteFilter);
         spinnerCurrentList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -107,6 +109,22 @@ public class FilterActivity extends AppCompatActivity {
         });
     }
 
+    public void deleteFilter(View view) {
+        int pos = spinnerCurrentList.getSelectedItemPosition();
+        if(pos > 0) {
+            this.preferences.remove(pos);
+            populateSpinnerCurrentFilter();
+            FileManager fm = new FileManager();
+            try {
+                fm.writePrefsToFile(this, preferences);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            //spinnerCurrentList.getOnItemSelectedListener().onItemSelected();
+        }
+
+    }
+
     public void makeList(View view) {
         if(((EditText) findViewById(R.id.inputText)).getText().toString().equals("")) {
             //you can't make a list with no name!
@@ -123,9 +141,6 @@ public class FilterActivity extends AppCompatActivity {
         List<Filter> filterList = FilterFactory.generateFiltersFromString(builder.toString());
         preferences.add(new Preferences(filterList, ((EditText) findViewById(R.id.inputText)).getText().toString()));
         populateSpinnerCurrentFilter();
-        for(Preferences p : this.preferences) {
-            System.out.println(p.getName() + ":" + p.getDistance() + ":" + p.getFoodType() + ":" + p.getRestaurantType() + ":" + p.getPriceRange() + ":" + p.getRating());
-        }
         FileManager fm = new FileManager();
         try {
             fm.writePrefsToFile(this, preferences);
