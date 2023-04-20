@@ -3,6 +3,7 @@ package us.four.lunchroulette;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -31,8 +32,18 @@ public class FilterActivity extends AppCompatActivity {
         populateSpinnerRating();
         populateSpinnerDistance();
 
-        createList.setOnClickListener(view -> {
-        });
+        createList.setOnClickListener(view -> makeList(view));
+    }
+
+    public void makeList(View view) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(spinnerFoodType.getSelectedItem() + "\n");
+        builder.append(spinnerRestaurantType.getSelectedItem() + "\n");
+        builder.append(spinnerPriceRange.getSelectedItem() + "\n");
+        builder.append(spinnerRating.getSelectedItem() + "\n");
+        builder.append(spinnerDistance.getSelectedItem() + "\n");
+        System.out.println(builder);
+
     }
 
     private void populateSpinnerDistance() {

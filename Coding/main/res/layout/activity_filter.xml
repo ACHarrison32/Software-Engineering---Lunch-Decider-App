@@ -122,10 +122,11 @@
             android:id="@+id/createList"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:backgroundTint="@color/black"
+            android:onClick="makeList"
             android:outlineProvider="paddedBounds"
             android:text="@string/create_list"
             android:textColor="@color/white"
-            android:textSize="22sp"
-            android:backgroundTint="@color/black"/>
+            android:textSize="22sp" />
     </LinearLayout>
 </LinearLayout>

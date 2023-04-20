@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
         //Can't enable wheel image until after content view is set
         ImageView wheelImage = findViewById(R.id.imageView2);
         wheelImage.setVisibility(View.INVISIBLE);
-
-
+        findViewById(R.id.button).setOnClickListener(view -> filtersButton_Click(view));
+        findViewById(R.id.imageView2).setOnClickListener(view -> spin(view));
     }
     public void filtersButton_Click(View view) {
         //open Filters activity
