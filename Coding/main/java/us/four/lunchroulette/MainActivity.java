@@ -1,7 +1,5 @@
 package us.four.lunchroulette;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -12,12 +10,13 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.myapplication.R;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
 import com.yelp.fusion.client.models.SearchResponse;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,12 +27,15 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import us.four.lunchroulette.filters.Preferences;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    List<Preferences> prefs = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         //TODO: Fix android permissions not allowing network by default
         //List of resturants that will be pulled from Yelp
         List<String> restaurants = new ArrayList<>();
@@ -115,10 +117,12 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.imageView2).setOnClickListener(view -> spin(view));
     }
     public void filtersButton_Click(View view) {
-        //open Filters activity
+
         Intent intent = new Intent("filters.intent.action.Launch");
         startActivity(intent);
-
+//        if(filter.getPreferencesList() == null && this.prefs != null) {
+//            filter.setPreferencesList(this.prefs);
+//        }
     }
 
     //seperate rotation int to be stored

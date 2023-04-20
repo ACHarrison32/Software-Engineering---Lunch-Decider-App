@@ -1,6 +1,6 @@
 package us.four.lunchroulette.filters;
 
-public class DistanceFilter extends Filter {
+public class DistanceFilter implements Filter {
     String name = "Distance";
     String value;
     public DistanceFilter(String valueIn) {

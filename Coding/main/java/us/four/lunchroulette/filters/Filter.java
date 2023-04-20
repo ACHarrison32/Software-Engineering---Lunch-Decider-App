@@ -1,6 +1,7 @@
 package us.four.lunchroulette.filters;
 
-public abstract class Filter {
+public interface Filter {
     public abstract String getName();
     public abstract String getValue();
 }
+

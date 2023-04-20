@@ -1,32 +1,38 @@
 package us.four.lunchroulette;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.myapplication.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import us.four.lunchroulette.filters.Filter;
 import us.four.lunchroulette.filters.FilterFactory;
+import us.four.lunchroulette.filters.FoodType;
 import us.four.lunchroulette.filters.Preferences;
+import us.four.lunchroulette.filters.RestaurantType;
 
 public class FilterActivity extends AppCompatActivity {
     private Spinner spinnerFoodType, spinnerRestaurantType, spinnerPriceRange, spinnerRating, spinnerDistance, spinnerCurrentList;
-    private Button createList;
     private List<Preferences> preferences = new ArrayList<>();
 
     public void setPreferencesList(List<Preferences> list) {
         this.preferences = list;
     }
 
+    public List<Preferences> getPreferencesList() {
+        return preferences;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,25 +44,71 @@ public class FilterActivity extends AppCompatActivity {
         spinnerRating = findViewById(R.id.spinnerRating);
         spinnerDistance = findViewById(R.id.spinnerDistance);
         spinnerCurrentList = findViewById(R.id.currentFilterSpinner);
-        createList = findViewById(R.id.createList);
+        Button createList = findViewById(R.id.createList);
 
         populateSpinnerFoodType();
         populateSpinnerRestaurantType();
         populateSpinnerPriceRange();
         populateSpinnerRating();
         populateSpinnerDistance();
+        FileManager fm = new FileManager();
+        try {
+            this.setPreferencesList(fm.readPrefsFromFile(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        if(preferences.size() == 0) {
+        if (preferences.size() == 0) {
             System.out.println("ez");
             preferences.add(new Preferences());
         }
         populateSpinnerCurrentFilter();
 
-        createList.setOnClickListener(view -> makeList(view));
+        createList.setOnClickListener(this::makeList);
+        spinnerCurrentList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                FilterFactory.currentFilterIndex = spinnerCurrentList.getSelectedItemPosition();
+                EditText etext = findViewById(R.id.inputText);
+                Preferences filter = getPreferencesList().get(spinnerCurrentList.getSelectedItemPosition());
+                if(filter.getName().equals("Any"))
+                    etext.setText("");
+                else
+                    etext.setText(filter.getName());
+                Spinner spinner = spinnerFoodType;
+                int i = 0;
+                for(FoodType f : FoodType.values()) {
+                    if(f == filter.getFoodType()) {
+                        spinner.setSelection(i);
+                    }
+                    i++;
+                }
+                spinner = spinnerRestaurantType;
+                i = 0;
+                for(RestaurantType r : RestaurantType.values()) {
+                    if(r == filter.getRestaurantType()) {
+                        spinner.setSelection(i);
+                    }
+                    i++;
+                }
+                spinner = spinnerPriceRange;
+                spinner.setSelection(filter.getPriceRange());
+                spinner = spinnerRating;
+                spinner.setSelection(filter.getRating());
+                spinner = spinnerDistance;
+                spinner.setSelection(filter.getDistance());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void makeList(View view) {
-        if(((EditText) findViewById(R.id.inputText)).getText().toString() == "") {
+        if(((EditText) findViewById(R.id.inputText)).getText().toString().equals("")) {
             //you can't make a list with no name!
         }
         StringBuilder builder = new StringBuilder();
@@ -64,13 +116,23 @@ public class FilterActivity extends AppCompatActivity {
         builder.append(spinnerRestaurantType.getSelectedItem() + "\n");
         builder.append(spinnerPriceRange.getSelectedItem() + "\n");
         builder.append(spinnerRating.getSelectedItem() + "\n");
-        builder.append(spinnerDistance.getSelectedItem() + "\n");
+        if(spinnerDistance.getSelectedItem().toString().split(" ").length <= 1) {
+            builder.append("Any");
+        } else
+            builder.append(spinnerDistance.getSelectedItem().toString().split(" ")[2]);
         List<Filter> filterList = FilterFactory.generateFiltersFromString(builder.toString());
         preferences.add(new Preferences(filterList, ((EditText) findViewById(R.id.inputText)).getText().toString()));
         populateSpinnerCurrentFilter();
         for(Preferences p : this.preferences) {
             System.out.println(p.getName() + ":" + p.getDistance() + ":" + p.getFoodType() + ":" + p.getRestaurantType() + ":" + p.getPriceRange() + ":" + p.getRating());
         }
+        FileManager fm = new FileManager();
+        try {
+            fm.writePrefsToFile(this, preferences);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private void populateSpinnerCurrentFilter() {

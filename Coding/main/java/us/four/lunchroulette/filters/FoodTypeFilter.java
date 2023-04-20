@@ -1,6 +1,6 @@
 package us.four.lunchroulette.filters;
 
-public class FoodTypeFilter extends Filter {
+public class FoodTypeFilter implements Filter {
     String name = "Food Type";
     String value;
     public FoodTypeFilter(String valueIn) {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class FilterFactory {
+    public static int currentFilterIndex = 0;
     public static List<Filter> generateFiltersFromString(String input) {
         List<Filter> filters = new ArrayList<>();
         String[] filtersAsStrings = input.split("\n");

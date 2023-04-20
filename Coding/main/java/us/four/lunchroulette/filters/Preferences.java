@@ -1,46 +1,12 @@
 package us.four.lunchroulette.filters;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-enum ResturantType {
-    ANY("Any"),
-    SIT_DOWN("Sit-Down"),
-    FAST_FOOD("Fast Food"),
-    BUFFET("Buffet"),
-    DRIVE_THRU("Drive Through"),
-    OUTDOORS("Outdoors");
-    private String type;
-    ResturantType(String s) {
-        this.type = s;
-    }
-    String getType() {
-        return this.type;
-    }
-    public static ResturantType fromString(String string) {
-        for (ResturantType pt : values()) {
-            if (pt.getType().equals(string)) {
-                return pt;
-            }
-        }
-        throw new NoSuchElementException("Element " + string + " does not exist.");
-    }
-}
-enum FoodType {
-    ANY,
-    AMERICAN,
-    ITALIAN,
-    MEXICAN,
-    ASIAN,
-    VEGETARIAN,
-    BREAKFAST,
-    BBQ;
-}
+
 
 public class Preferences {
-    private List<Filter> filters;
-    private String name = "Placeholder";
+    private final List<Filter> filters;
+    private final String name;
     public Preferences(List<Filter> filterList, String name) {
         this.filters = filterList;
         this.name = name;
@@ -67,7 +33,7 @@ public class Preferences {
         if(filters.get(3).getValue().equals("Any"))
             return 0;
         else
-            return String.valueOf(filters.get(3).getValue()).trim().length()/2;
+            return String.valueOf(filters.get(3).getValue()).trim().length();
     }
     public int getPriceRange() {
         if(filters.get(2).getValue().equals("Any"))
@@ -75,14 +41,15 @@ public class Preferences {
         else
             return String.valueOf(filters.get(2).getValue()).trim().length()/2;
     }
-    public ResturantType getRestaurantType() {
-        return ResturantType.fromString(filters.get(1).getValue().toString());
+    public RestaurantType getRestaurantType() {
+        return RestaurantType.fromString(filters.get(1).getValue());
     }
     public FoodType getFoodType() {
-        return FoodType.valueOf(filters.get(0).getValue().toString().toUpperCase());
+        return FoodType.valueOf(filters.get(0).getValue().toUpperCase());
     }
     public String getName() {
         return this.name;
     }
 
 }
+
