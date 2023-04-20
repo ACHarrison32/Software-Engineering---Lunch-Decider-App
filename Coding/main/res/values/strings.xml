@@ -6,7 +6,7 @@
     <string name="price_range">Price Range</string>
     <string name="rating">Rating</string>
     <string name="distance">Distance</string>
-    <string name="create_list">Create List</string>
+    <string name="create_list">Create Filter</string>
     <string name="food_type_example">e.g. American, Italian, etc.</string>
     <string name="restaurant_type_example">e.g. Sit-Down, Buffet, etc.</string>
     <string name="price_range_example">e.g. $, $$, $$$, etc.</string>
@@ -37,10 +37,10 @@
     </string-array>
     <string-array name="spinner_price_range">
         <item> Any </item>
-        <item> 💲   </item>
-        <item> 💲💲  </item>
-        <item> 💲💲💲   </item>
-        <item> 💲💲💲💲 </item>
+        <item>💲</item>
+        <item>💲💲</item>
+        <item>💲💲💲</item>
+        <item>💲💲💲💲</item>
     </string-array>
     <string-array name="spinner_rating">
         <item> Any </item>

@@ -2,7 +2,7 @@ package us.four.lunchroulette.filters;
 
 public class RestaurantTypeFilter extends Filter {
     String name = "Restaurant Type";
-    Object value;
+    String value;
     public RestaurantTypeFilter(String valueIn) {
         value = valueIn;
     }
@@ -13,7 +13,7 @@ public class RestaurantTypeFilter extends Filter {
     }
 
     @Override
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 

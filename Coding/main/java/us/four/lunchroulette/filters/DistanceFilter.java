@@ -2,8 +2,8 @@ package us.four.lunchroulette.filters;
 
 public class DistanceFilter extends Filter {
     String name = "Distance";
-    Object value;
-    public DistanceFilter(int valueIn) {
+    String value;
+    public DistanceFilter(String valueIn) {
         value = valueIn;
     }
 
@@ -13,7 +13,7 @@ public class DistanceFilter extends Filter {
     }
 
     @Override
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 

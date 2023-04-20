@@ -2,7 +2,7 @@ package us.four.lunchroulette.filters;
 
 public class RatingFilter extends Filter {
     String name = "Rating";
-    Object value;
+    String value;
     public RatingFilter(String valueIn) {
         value = valueIn;
     }
@@ -13,7 +13,7 @@ public class RatingFilter extends Filter {
     }
 
     @Override
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
