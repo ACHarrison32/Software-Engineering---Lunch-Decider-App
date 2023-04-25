@@ -3,12 +3,20 @@ package us.four.lunchroulette;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,10 +27,13 @@ import com.yelp.fusion.client.models.Business;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,14 +42,16 @@ import us.four.lunchroulette.filters.Preferences;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    public Business popupRestaurant = null;
     List<Preferences> prefs = null;
+    private String[] wheelText;
+    List<Business> restaurants = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         //TODO: Fix android permissions not allowing network by default
         //List of resturants that will be pulled from Yelp
-        List<String> restaurants = new ArrayList<>();
+        restaurants = new ArrayList<>();
         //Grab current context so the concurrent part can reference it
         Context context = this;
         //instance of Yelp Fusion api factory
@@ -73,10 +86,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                         SearchResponse searchResponse = response.body();
+                        List<String> restaurantNames = new ArrayList<>();
                         for (Business b : searchResponse.getBusinesses()) {
                             //we only want to add about 6 resturants.
-                            if(restaurants.size() < 6)
-                                restaurants.add(b.getName());
+                            if(restaurants.size() < 6) {
+                                restaurants.add(b);
+                                restaurantNames.add(b.getName());
+                            }
                         }
 
 
@@ -86,9 +102,8 @@ public class MainActivity extends AppCompatActivity {
                         //string list to appear in the wheel
                         //can be up to like 10 long, only limited by how many colors you give it
                         //Any more than 6 and you risk having text spacing issues
-                        String[] roast = restaurants.toArray(new String[0]);
-
-
+                        String[] roast = restaurantNames.toArray(new String[0]);
+                        wheelText = restaurantNames.toArray(new String[0]);
 
                         //create an instance of the wheel object
                         Wheel wheel = new Wheel(context, roast);
@@ -113,9 +128,96 @@ public class MainActivity extends AppCompatActivity {
         //Can't enable wheel image until after content view is set
         ImageView wheelImage = findViewById(R.id.imageView2);
         wheelImage.setVisibility(View.INVISIBLE);
-        findViewById(R.id.button).setOnClickListener(view -> filtersButton_Click(view));
-        findViewById(R.id.imageView2).setOnClickListener(view -> spin(view));
+        findViewById(R.id.button).setOnClickListener(this::filtersButton_Click);
+        findViewById(R.id.imageView2).setOnClickListener(this::spin);
     }
+
+    public void deployPopup(View view, String restaurant, Drawable img) {
+        //search list for restaurant name
+        Business business = null;
+        for(Business b : restaurants) {
+            if (b.getName().startsWith(restaurant)) {
+                business = b;
+            }
+        }
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_restaurant_info, null);
+
+
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        int color = 0xFFFFFFFF;
+        TypedValue typedValue = new TypedValue();
+        if (this.getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true))
+        {
+            color = typedValue.data;
+        }
+
+        popupWindow.setBackgroundDrawable(new ColorDrawable(color));
+        popupWindow.setElevation(20);
+
+       // popupWindow.set
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        // dismiss the popup window when touched
+        popupView.setOnTouchListener((v, event) -> {
+            view.performClick();
+            popupWindow.dismiss();
+            return true;
+        });
+
+        popupRestaurant = business;
+
+        //and then call the click listener manually LOL
+        Business finalBusiness = business;
+        //this is really dumb and a huge hack
+        //but as far as i can tell android forces you to do this
+        //if you want to pass info to a PopupWindow
+        //get some random object within it
+        ImageView b = popupView.findViewById(R.id.restaurantImage);
+        //give it a click listener where you write your code
+        b.setOnClickListener(v -> {
+            fillRestaurant(finalBusiness, popupView, img);
+        });
+        b.callOnClick();
+    }
+
+    public Drawable getImageFromUrl(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void fillRestaurant(Business b, View view, Drawable img) {
+        TextView name = view.findViewById(R.id.nameText);
+        TextView rating = view.findViewById(R.id.ratingText);
+        ImageView image = view.findViewById(R.id.restaurantImage);
+        int stars = (int) Math.floor(b.getRating());
+        String s = "";
+        for(int i = 0; i < stars; i++) {
+            s = s + "⭐";
+        }
+        s = s + " (" + b.getRating() + ")";
+        rating.setText(s);
+        name.setText(b.getName());
+        image.setImageDrawable(img);
+        System.out.println(b.getImageUrl());
+
+    }
+
     public void filtersButton_Click(View view) {
 
         Intent intent = new Intent("filters.intent.action.Launch");
@@ -140,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         //FROM THERE WE USE MATH TO FIND THE RESTURANT
         //FOR EXAMPLE: WHICH RESTURANT IS 790 DEGREES OF ROTATION?
 
-        //String[] roast = wheel.getEntries();
+        String[] roast = wheelText;
 
         //TextView textview2 = (TextView) this.findViewById(R.id.textView2);
         //textview2.setVisibility(View.VISIBLE);
@@ -158,8 +260,9 @@ public class MainActivity extends AppCompatActivity {
 
         //used for getting the result
         //crazy math :)
-        //int segmentLength = (360/roast.length);
-        //int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), 8);
+        int segmentLength = (360/roast.length);
+        int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), 8);
+        String restaurant = roast[result-1];
         //textview2.setText(roast[result-1]);
 
         //The animation interpolator determines how the 'physics' of the spin look
@@ -175,5 +278,27 @@ public class MainActivity extends AppCompatActivity {
 
         //Go!!
         refreshImage.startAnimation(anim);
+
+        MainActivity activity = this;
+        Executor executor = command -> new Thread(command).start();
+        executor.execute(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            Business business = null;
+            for(Business b : restaurants) {
+                if (b.getName().startsWith(restaurant)) {
+                    business = b;
+                }
+            }
+            Drawable img = this.getImageFromUrl(business.getImageUrl());
+            activity.runOnUiThread(() -> {
+                deployPopup(view, restaurant, img);
+            });
+        });
+
+
     }
 }
