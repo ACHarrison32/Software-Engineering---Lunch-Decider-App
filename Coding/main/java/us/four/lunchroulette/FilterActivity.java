@@ -98,7 +98,14 @@ public class FilterActivity extends AppCompatActivity {
                 spinner = spinnerRating;
                 spinner.setSelection(filter.getRating());
                 spinner = spinnerDistance;
-                spinner.setSelection(filter.getDistance());
+                int[] distances = {0, 1, 5, 10, 15, 20, 25, 50};
+                int selection = 0;
+                for(int d = 0; d < distances.length; d++) {
+                    if(filter.getDistance() == distances[d]) {
+                        spinner.setSelection(d);
+                    }
+                }
+
 
             }
 
@@ -128,6 +135,7 @@ public class FilterActivity extends AppCompatActivity {
     public void makeList(View view) {
         if(((EditText) findViewById(R.id.inputText)).getText().toString().equals("")) {
             //you can't make a list with no name!
+            return;
         }
         StringBuilder builder = new StringBuilder();
         builder.append(spinnerFoodType.getSelectedItem() + "\n");

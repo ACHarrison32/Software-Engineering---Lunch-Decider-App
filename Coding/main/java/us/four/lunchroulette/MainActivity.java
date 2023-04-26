@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
         int color = 0xFFFFFFFF;
         TypedValue typedValue = new TypedValue();
         if (this.getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true))
@@ -175,9 +177,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
         popupRestaurant = business;
+        Button reroll = popupView.findViewById(R.id.rerollButton);
+        reroll.setOnClickListener(v -> {
+            popupWindow.dismiss();
+        });
 
-        //and then call the click listener manually LOL
         Business finalBusiness = business;
+
+        Button navigate = popupView.findViewById(R.id.navButton);
+        navigate.setOnClickListener(v -> {
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("geo:0,0?q=" + finalBusiness.getLocation().getAddress1()));
+            startActivity(intent);
+        });
+        //and then call the click listener manually LOL
         //this is really dumb and a huge hack
         //but as far as i can tell android forces you to do this
         //if you want to pass info to a PopupWindow
@@ -261,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         //used for getting the result
         //crazy math :)
         int segmentLength = (360/roast.length);
-        int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), 8);
+        int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), roast.length-1);
         String restaurant = roast[result-1];
         //textview2.setText(roast[result-1]);
 
