@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         //used for getting the result
         //crazy math :)
         int segmentLength = (360/roast.length);
-        int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), roast.length-1);
+        int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), roast.length);
         String restaurant = roast[result-1];
         //textview2.setText(roast[result-1]);
 
