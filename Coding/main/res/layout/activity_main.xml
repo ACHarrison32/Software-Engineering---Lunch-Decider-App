@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="285dp"
-        android:layout_height="190dp"
+        android:layout_width="385dp"
+        android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,6 +32,7 @@
         android:id="@+id/imageView2"
         android:layout_width="390dp"
         android:layout_height="390dp"
+        android:layout_marginTop="80dp"
         android:clickable="true"
         android:contentDescription="Roulette Wheel"
         android:focusable="auto"
@@ -46,6 +47,7 @@
         android:id="@+id/imageView3"
         android:layout_width="84dp"
         android:layout_height="68dp"
+        android:layout_marginTop="80dp"
         android:translationY="-10dp"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,6 +59,7 @@
         android:id="@+id/imageView4"
         android:layout_width="67dp"
         android:layout_height="66dp"
+        android:layout_marginTop="75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />

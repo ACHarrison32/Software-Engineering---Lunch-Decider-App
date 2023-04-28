@@ -13,6 +13,7 @@
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Current Filter:"
         android:textSize="22sp"
@@ -139,16 +140,20 @@
         android:id="@+id/deleteFilter"
         android:layout_width="150dp"
         android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
         android:text="Remove Filter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/createList"
         android:layout_width="164dp"
         android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/create_list"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
