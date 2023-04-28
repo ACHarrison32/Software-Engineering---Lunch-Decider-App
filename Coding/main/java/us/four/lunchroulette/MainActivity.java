@@ -71,9 +71,10 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
 
                 // general placeholder params, good for a default startup screen
-                params.put("radius", "10000");
+                params.put("radius", "20000");
                 params.put("open_now", "true");
                 params.put("term", "food");
+                params.put("category", "restaurant");
                 params.put("sort_by", "rating");
                 //params.put("latitude", tracker.getLatitude() + "");
                 //params.put("longitude", tracker.getLongitude() + "");
