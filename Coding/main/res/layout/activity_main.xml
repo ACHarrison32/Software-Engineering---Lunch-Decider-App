@@ -30,7 +30,7 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="390dp"
         android:layout_marginTop="80dp"
         android:clickable="true"
