@@ -84,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
 //                params.put("term", "food");
                 params.put("categories", "restaurants");
                 params.put("sort_by", "rating");
-//                params.put("latitude", tracker.getLatitude() + "");
-//                params.put("longitude", tracker.getLongitude() + "");
+                params.put("latitude", tracker.getLatitude() + "");
+                params.put("longitude", tracker.getLongitude() + "");
 
                 //For testing, use predefined coords. For production, get user GPS.
-                params.put("latitude", "33.9788691");
-                params.put("longitude", "-98.5391547");
+//                params.put("latitude", "33.9788691");
+//                params.put("longitude", "-98.5391547");
                 //call yelp api async (no networking on main thread allowed)
 
                 Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
