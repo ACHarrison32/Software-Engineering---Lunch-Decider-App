@@ -66,7 +66,7 @@ public class Wheel {
             //if we have enough defined colors
             if(i < colors.length) {
                 //set the segment color depending on which string this is
-                paint.setColor(colors[i % 10]);
+                paint.setColor(colors[i % colors.length]);
             } else {
                 //if we run out of colors, default to black
                 paint.setColor(0XFF000000);
@@ -90,7 +90,6 @@ public class Wheel {
                 temp.add("");
                 int lines = 0;
                 for(String s : split) {
-                    System.out.println(s);
                     if((temp.get(index) + s).length() < (15 - (lines*1.5))) {
                         temp.set(index, temp.get(index) + " " + s);
                     } else {
@@ -104,7 +103,6 @@ public class Wheel {
 //                    l++;
 //                }
                 split = temp.toArray(new String[0]);
-                System.out.println(temp.size() + " " + split.length);
                 int yoff = 0;
                 float hoff = 10f;
                 for(String s : split) {
@@ -126,9 +124,8 @@ public class Wheel {
                 canvas.drawTextOnPath(strings[i], path, 0, height / 10f, paint);
         }
         Bitmap bitmap2 = this.rotateBitmap180(bitmap);
-        BitmapDrawable werg = new BitmapDrawable(context.getResources(), bitmap2);
 
-        return werg;
+        return new BitmapDrawable(context.getResources(), bitmap2);
     }
 
     public Bitmap rotateBitmap180(Bitmap bitmap) {

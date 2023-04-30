@@ -40,16 +40,23 @@ import java.util.concurrent.Executor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import us.four.lunchroulette.filters.Preferences;
 
 
 public class MainActivity extends AppCompatActivity {
-    public Business popupRestaurant = null;
-    List<Preferences> prefs = null;
     private String[] wheelText;
-    List<Business> restaurants = null;
+    private List<Business> restaurants = null;
+    /*
+    * First function that gets called on program entry
+    * you can treat this like 'int main()'
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //Can't enable wheel image until after content view is set
+        ImageView wheelImage = findViewById(R.id.imageView2);
+        wheelImage.setVisibility(View.INVISIBLE);
 
         //TODO: Fix android permissions not allowing network by default
         //List of resturants that will be pulled from Yelp
@@ -57,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         //Grab current context so the concurrent part can reference it
         Context context = this;
         //instance of Yelp Fusion api factory
+        //MIT license :)
         YelpFusionApiFactory apiFactory = new YelpFusionApiFactory();
         //Access GPS from the user.
         //TODO: Fallback method if this doesn't work, allow ZIP input
@@ -73,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 // general placeholder params, good for a default startup screen
                 params.put("radius", "20000");
                 params.put("open_now", "true");
-                params.put("term", "food");
-                params.put("category", "restaurant");
+//                params.put("term", "food");
+                params.put("categories", "restaurants");
                 params.put("sort_by", "rating");
-                //params.put("latitude", tracker.getLatitude() + "");
-                //params.put("longitude", tracker.getLongitude() + "");
+//                params.put("latitude", tracker.getLatitude() + "");
+//                params.put("longitude", tracker.getLongitude() + "");
 
                 //For testing, use predefined coords. For production, get user GPS.
                 params.put("latitude", "33.9788691");
@@ -105,11 +113,11 @@ public class MainActivity extends AppCompatActivity {
                         //string list to appear in the wheel
                         //can be up to like 10 long, only limited by how many colors you give it
                         //Any more than 6 and you risk having text spacing issues
-                        String[] roast = restaurantNames.toArray(new String[0]);
+                        String[] namesOfRestaurants = restaurantNames.toArray(new String[0]);
                         wheelText = restaurantNames.toArray(new String[0]);
 
                         //create an instance of the wheel object
-                        Wheel wheel = new Wheel(context, roast);
+                        Wheel wheel = new Wheel(context, namesOfRestaurants);
                         //set our image displayed to the image made by the wheel class
                         wheelImage.setImageDrawable(wheel.getImage());
                         //we only want to show the wheel image after its been created
@@ -126,11 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //Can't enable wheel image until after content view is set
-        ImageView wheelImage = findViewById(R.id.imageView2);
-        wheelImage.setVisibility(View.INVISIBLE);
+
         findViewById(R.id.button).setOnClickListener(this::filtersButton_Click);
         findViewById(R.id.imageView2).setOnClickListener(this::spin);
     }
@@ -156,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
         boolean focusable = true; // lets taps outside the popup also dismiss it
         PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        //TODO: COMMENT THIS
         int color = 0xFFFFFFFF;
         TypedValue typedValue = new TypedValue();
         if (this.getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true))
@@ -177,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        popupRestaurant = business;
+
         Button reroll = popupView.findViewById(R.id.rerollButton);
         reroll.setOnClickListener(v -> {
             popupWindow.dismiss();
@@ -228,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         rating.setText(s);
         name.setText(b.getName());
         image.setImageDrawable(img);
-        System.out.println(b.getImageUrl());
+
 
     }
 
@@ -258,8 +264,7 @@ public class MainActivity extends AppCompatActivity {
 
         String[] roast = wheelText;
 
-        //TextView textview2 = (TextView) this.findViewById(R.id.textView2);
-        //textview2.setVisibility(View.VISIBLE);
+
 
         //determines how much the wheel should spin
         //since the animation only takes 1000ms, more angle means a faster spin
@@ -277,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
         int segmentLength = (360/roast.length);
         int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), roast.length);
         String restaurant = roast[result-1];
-        //textview2.setText(roast[result-1]);
+
 
         //The animation interpolator determines how the 'physics' of the spin look
         //previous we were using LinearInterpolator, however this one looks nicer
@@ -293,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
         //Go!!
         refreshImage.startAnimation(anim);
 
+        //TODO: Comment this chunk
         MainActivity activity = this;
         Executor executor = command -> new Thread(command).start();
         executor.execute(() -> {

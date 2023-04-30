@@ -60,13 +60,13 @@ public class FilterActivity extends AppCompatActivity {
         }
 
         if (preferences.size() == 0) {
-            System.out.println("ez");
             preferences.add(new Preferences());
         }
         populateSpinnerCurrentFilter();
 
         createList.setOnClickListener(this::makeList);
         deleteFilter.setOnClickListener(this::deleteFilter);
+
         spinnerCurrentList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

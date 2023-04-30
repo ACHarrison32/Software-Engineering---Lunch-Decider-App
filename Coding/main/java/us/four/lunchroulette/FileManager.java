@@ -27,7 +27,6 @@ public class FileManager {
     public List<Preferences> readPrefsFromFile(Context context) throws IOException {
         File file = new File(context.getFilesDir(), "filters.conf");
         String s = Files.asCharSource(file, StandardCharsets.UTF_8).read();
-        System.out.println(s);
         return this.deserializeFromJson(s);
     }
 
