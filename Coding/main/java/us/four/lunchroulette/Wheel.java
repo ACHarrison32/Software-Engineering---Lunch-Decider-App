@@ -90,8 +90,9 @@ public class Wheel {
                 temp.add("");
                 int lines = 0;
                 for(String s : split) {
-                    if((temp.get(index) + s).length() < (15 - (lines*1.5))) {
-                        temp.set(index, temp.get(index) + " " + s);
+                    if((temp.get(index) + s).length() < (17 - (lines*2))) {
+                        if(lines < 4)
+                            temp.set(index, temp.get(index) + " " + s);
                     } else {
                         temp.add(s);
                         index++;
