@@ -27,7 +27,6 @@ import com.example.myapplication.R;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
-import com.yelp.fusion.client.models.Category;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
@@ -65,67 +64,13 @@ public class MainActivity extends AppCompatActivity {
         //Access GPS from the user.
         //TODO: Fallback method if this doesn't work, allow ZIP input
         GPSTracker tracker = new GPSTracker(this);
-        if(tracker.canGetLocation) {
-            Map<String, String> params = new HashMap<>();
-            tracker.getLocation();
-            Preferences pref = this.getCurrentPreference();
-            // general placeholder params, good for a default startup screen
-            if(pref == null) {
-                params.put("radius", "40000");
-            } else {
-                params.put("radius", String.valueOf(pref.getDistance()));
-                if (pref.getPriceRange() != 0) {
-                    //we have to put every price range *up to* the one selected
-                    String priceRange = "";
-                    for (int i = 1; i <= pref.getPriceRange(); i++) {
-                        priceRange = priceRange + i + ", ";
-                    }
-                    priceRange = priceRange.substring(0, priceRange.length() - 2);
-                    System.out.println(priceRange);
-                    params.put("price", priceRange);
-                }
-            }
-            params.put("open_now", "true");
-            params.put("categories", "restaurants");
-            params.put("sort_by", "best_match");
-            params.put("latitude", tracker.getLatitude() + "");
-            params.put("longitude", tracker.getLongitude() + "");
-            params.put("limit", "50");
-            this.callYelp(params);
-        }
+        Map<String, String> params = this.makeParameterMap();
+        params.put("latitude", tracker.getLatitude() + "");
+        params.put("longitude", tracker.getLongitude() + "");
+        this.callYelp(params);
         findViewById(R.id.button).setOnClickListener(this::filtersButton_Click);
         findViewById(R.id.imageView2).setOnClickListener(this::spin);
         this.runChangedItemScanner(tracker);
-    }
-
-    private void runChangedItemScanner(GPSTracker tracker) {
-
-        Executor executor = command -> new Thread(command).start();
-        Activity activity = this;
-        executor.execute(() -> {
-            int selectedItem = FileManager.currentFilterIndex;
-            while(true) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                if(FileManager.currentFilterIndex != selectedItem) {
-                    if(FileManager.currentFilterIndex != 0) {
-                        System.out.println("filter index changed!");
-                        Map<String, String> params = this.makeParameterMap();
-//                        params.put("latitude", tracker.getLatitude() + "");
-//                        params.put("longitude", tracker.getLongitude() + "");
-                        params.put("latitude", "33.930828");
-                        params.put("longitude", "-98.484879");
-                        activity.runOnUiThread(() -> this.callYelp(params));
-                    }
-                    selectedItem = FileManager.currentFilterIndex;
-                }
-            }
-        });
-
     }
 
     public Map<String, String> makeParameterMap() {
@@ -135,39 +80,57 @@ public class MainActivity extends AppCompatActivity {
             params.put("radius", String.valueOf(pref.getDistance()));
         else
             params.put("radius", "40000");
-        if (pref.getPriceRange() != 0) {
-            //we have to put every price range *up to* the one selected
-            String priceRange = "";
-            for (int i = 1; i <= pref.getPriceRange(); i++) {
-                priceRange = priceRange + i + ", ";
+        if(pref != null) {
+            if (pref.getPriceRange() != 0) {
+                //we have to put every price range *up to* the one selected
+                String priceRange = "";
+                for (int i = 1; i <= pref.getPriceRange(); i++) {
+                    priceRange = priceRange + i + ", ";
+                }
+                priceRange = priceRange.substring(0, priceRange.length() - 2);
+                System.out.println(priceRange + " pricerange");
+                params.put("price", priceRange);
             }
-            priceRange = priceRange.substring(0, priceRange.length() - 2);
-            System.out.println(priceRange + " pricerange");
-            params.put("price", priceRange);
         }
         params.put("open_now", "true");
         String category = "restaurants";
-        System.out.println(pref.getFoodType());
-        switch(pref.getFoodType()) {
-            case AMERICAN: category = "newamerican, tradamerican";
-            break;
-            case ITALIAN: category = "italian";
-            break;
-            case MEXICAN: category = "mexican, brazilian, newmexican, spanish, tex-mex";
-            break;
-            case ASIAN: category = "asianfusion, cambodian, chinese, indpak, japanese, korean, malaysian, panasian, taiwanese, thai, vietnamese";
-            break;
-            case VEGETARIAN: category = "vegetarian";
-            break;
-            case BREAKFAST: category = "breakfast_brunch";
-            break;
-            case BBQ: category = "bbq";
-            break;
+        if(pref.getFoodType() != null) {
+            switch (pref.getFoodType()) {
+                case AMERICAN:
+                    category = "newamerican, tradamerican";
+                    break;
+                case ITALIAN:
+                    category = "italian";
+                    break;
+                case MEXICAN:
+                    category = "mexican, brazilian, newmexican, spanish, tex-mex";
+                    break;
+                case ASIAN:
+                    category = "asianfusion, cambodian, chinese, indpak, japanese, korean, malaysian, panasian, taiwanese, thai, vietnamese";
+                    break;
+                case VEGETARIAN:
+                    category = "vegetarian";
+                    break;
+                case BREAKFAST:
+                    category = "breakfast_brunch";
+                    break;
+                case BBQ:
+                    category = "bbq";
+                    break;
+            }
         }
-        if(pref.getRestaurantType() == RestaurantType.BAR)
-            params.put("term", pref.getRestaurantType().toString());
+        if(pref.getRestaurantType() != null) {
+            if (pref.getRestaurantType() == RestaurantType.BAR)
+                params.put("term", pref.getRestaurantType().toString());
+            if (pref.getRestaurantType() == RestaurantType.FAST_FOOD)
+                params.put("term", "Fast Food");
+            if (pref.getRestaurantType() == RestaurantType.CAFE)
+                params.put("term", "Cafes");
+            if (pref.getRestaurantType() == RestaurantType.DINER)
+                params.put("term", "Diners");
+        }
         params.put("categories", category);
-        params.put("sort_by", "rating");
+        params.put("sort_by", "best_match");
         return params;
     }
 
@@ -235,39 +198,8 @@ public class MainActivity extends AppCompatActivity {
                                     System.out.println("skipp because of rating!");
                                     continue;
                                 }
-                            boolean shouldContinue = false;
-                            for(Category c : b.getCategories()) {
-                                if(shouldContinue)
-                                    continue;
-                                assert pref != null;
-                                if(pref.getRestaurantType().equals(RestaurantType.FAST_FOOD) && c.getTitle().equals("Fast Food")) {
-                                    restaurants.add(b);
-                                    restaurantNames.add(b.getName());
-                                    shouldContinue = true;
-                                    continue;
-                                }
-                                if(pref.getRestaurantType().equals(RestaurantType.DINER) && c.getTitle().equals("Diners")) {
-                                    restaurants.add(b);
-                                    restaurantNames.add(b.getName());
-                                    shouldContinue = true;
-                                    continue;
-                                }
-                                if(pref.getRestaurantType().equals(RestaurantType.CAFE) && c.getTitle().equals("Cafes")) {
-                                    restaurants.add(b);
-                                    restaurantNames.add(b.getName());
-                                    shouldContinue = true;
-                                    continue;
-
-                                }
-                                if(pref.getRestaurantType().equals(RestaurantType.ANY) || pref.getRestaurantType().equals(RestaurantType.BAR)) {
-                                    restaurants.add(b);
-                                    restaurantNames.add(b.getName());
-                                    shouldContinue = true;
-                                    continue;
-
-                                }
-
-                            }
+                            restaurants.add(b);
+                            restaurantNames.add(b.getName());
 
                         }
                     }
@@ -282,6 +214,36 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void runChangedItemScanner(GPSTracker tracker) {
+
+        Executor executor = command -> new Thread(command).start();
+        Activity activity = this;
+        executor.execute(() -> {
+            int selectedItem = FileManager.currentFilterIndex;
+            while(true) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if(FileManager.currentFilterIndex != selectedItem) {
+                    if(FileManager.currentFilterIndex != 0) {
+                        System.out.println("filter index changed!");
+                        Map<String, String> params = this.makeParameterMap();
+                        params.put("latitude", tracker.getLatitude() + "");
+                        params.put("longitude", tracker.getLongitude() + "");
+//                        params.put("latitude", "33.930828");
+//                        params.put("longitude", "-98.484879");
+                        activity.runOnUiThread(() -> this.callYelp(params));
+                    }
+                    selectedItem = FileManager.currentFilterIndex;
+                }
+            }
+        });
+
     }
 
     private void deployPopup(View view, String restaurant, Drawable img) {
