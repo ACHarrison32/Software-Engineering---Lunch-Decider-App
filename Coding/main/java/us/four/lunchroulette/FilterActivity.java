@@ -170,10 +170,7 @@ public class FilterActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if(existingIndex != 0) {
-            spinnerCurrentList.setSelection(existingIndex);
-        } else
-            spinnerCurrentList.setSelection(preferences.size()-1);
+        spinnerCurrentList.setSelection(0);
         FileManager.currentFilterIndex = spinnerCurrentList.getSelectedItemPosition();
     }
 

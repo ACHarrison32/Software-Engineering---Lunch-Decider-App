@@ -64,7 +64,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:text="Distance"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/restaurantImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ratingText" />
@@ -76,7 +76,7 @@
         android:layout_marginBottom="8dp"
         android:autoLink="phone"
         android:text="Hours"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/restaurantImage"
         app:layout_constraintEnd_toStartOf="@+id/ratingText"
         app:layout_constraintStart_toStartOf="parent" />

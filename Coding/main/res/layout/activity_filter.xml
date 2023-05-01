@@ -45,7 +45,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/list_name"
-            android:textColor="@android:color/black"
             android:textSize="22sp" />
 
         <EditText
@@ -63,7 +62,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/food_type"
-            android:textColor="@android:color/black"
             android:textSize="22sp" />
 
         <Spinner
@@ -78,7 +76,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restaurant_type"
-            android:textColor="@android:color/black"
             android:textSize="22sp" />
 
         <Spinner
@@ -93,7 +90,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/price_range"
-            android:textColor="@android:color/black"
             android:textSize="22sp" />
 
         <Spinner
@@ -108,7 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rating"
-            android:textColor="@android:color/black"
             android:textSize="22sp" />
 
         <Spinner
@@ -124,7 +119,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/distance"
-            android:textColor="@android:color/black"
             android:textSize="22sp" />
 
         <Spinner

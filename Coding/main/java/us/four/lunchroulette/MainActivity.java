@@ -27,6 +27,7 @@ import com.example.myapplication.R;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
+import com.yelp.fusion.client.models.Category;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             Preferences pref = this.getCurrentPreference();
             // general placeholder params, good for a default startup screen
             if(pref == null) {
-                params.put("radius", "16000");
+                params.put("radius", "40000");
             } else {
                 params.put("radius", String.valueOf(pref.getDistance()));
                 if (pref.getPriceRange() != 0) {
@@ -86,9 +87,10 @@ public class MainActivity extends AppCompatActivity {
             }
             params.put("open_now", "true");
             params.put("categories", "restaurants");
-            params.put("sort_by", "rating");
+            params.put("sort_by", "best_match");
             params.put("latitude", tracker.getLatitude() + "");
             params.put("longitude", tracker.getLongitude() + "");
+            params.put("limit", "50");
             this.callYelp(params);
         }
         findViewById(R.id.button).setOnClickListener(this::filtersButton_Click);
@@ -113,8 +115,10 @@ public class MainActivity extends AppCompatActivity {
                     if(FileManager.currentFilterIndex != 0) {
                         System.out.println("filter index changed!");
                         Map<String, String> params = this.makeParameterMap();
-                        params.put("latitude", tracker.getLatitude() + "");
-                        params.put("longitude", tracker.getLongitude() + "");
+//                        params.put("latitude", tracker.getLatitude() + "");
+//                        params.put("longitude", tracker.getLongitude() + "");
+                        params.put("latitude", "33.930828");
+                        params.put("longitude", "-98.484879");
                         activity.runOnUiThread(() -> this.callYelp(params));
                     }
                     selectedItem = FileManager.currentFilterIndex;
@@ -130,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         if(pref != null)
             params.put("radius", String.valueOf(pref.getDistance()));
         else
-            params.put("radius", "16000");
+            params.put("radius", "40000");
         if (pref.getPriceRange() != 0) {
             //we have to put every price range *up to* the one selected
             String priceRange = "";
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             case BBQ: category = "bbq";
             break;
         }
-        if(pref.getRestaurantType() != RestaurantType.ANY)
+        if(pref.getRestaurantType() == RestaurantType.BAR)
             params.put("term", pref.getRestaurantType().toString());
         params.put("categories", category);
         params.put("sort_by", "rating");
@@ -227,10 +231,44 @@ public class MainActivity extends AppCompatActivity {
                         if (restaurants.size() < 6) {
                             Preferences pref = getCurrentPreference();
                             if(pref != null && pref.getRating() != 0)
-                                if(b.getRating() < pref.getRating())
+                                if(b.getRating() < pref.getRating()) {
+                                    System.out.println("skipp because of rating!");
                                     continue;
-                            restaurants.add(b);
-                            restaurantNames.add(b.getName());
+                                }
+                            boolean shouldContinue = false;
+                            for(Category c : b.getCategories()) {
+                                if(shouldContinue)
+                                    continue;
+                                assert pref != null;
+                                if(pref.getRestaurantType().equals(RestaurantType.FAST_FOOD) && c.getTitle().equals("Fast Food")) {
+                                    restaurants.add(b);
+                                    restaurantNames.add(b.getName());
+                                    shouldContinue = true;
+                                    continue;
+                                }
+                                if(pref.getRestaurantType().equals(RestaurantType.DINER) && c.getTitle().equals("Diners")) {
+                                    restaurants.add(b);
+                                    restaurantNames.add(b.getName());
+                                    shouldContinue = true;
+                                    continue;
+                                }
+                                if(pref.getRestaurantType().equals(RestaurantType.CAFE) && c.getTitle().equals("Cafes")) {
+                                    restaurants.add(b);
+                                    restaurantNames.add(b.getName());
+                                    shouldContinue = true;
+                                    continue;
+
+                                }
+                                if(pref.getRestaurantType().equals(RestaurantType.ANY) || pref.getRestaurantType().equals(RestaurantType.BAR)) {
+                                    restaurants.add(b);
+                                    restaurantNames.add(b.getName());
+                                    shouldContinue = true;
+                                    continue;
+
+                                }
+
+                            }
+
                         }
                     }
                     setWheel(restaurantNames, context);
