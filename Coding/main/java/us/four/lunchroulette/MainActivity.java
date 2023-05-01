@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         if(pref != null)
             params.put("radius", String.valueOf(pref.getDistance()));
         else
-            params.put("radius", "40000");
+            params.put("radius", "32186");
         if(pref != null) {
             if (pref.getPriceRange() != 0) {
                 //we have to put every price range *up to* the one selected
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         }
         params.put("open_now", "true");
         String category = "restaurants";
-        if(pref.getFoodType() != null) {
+        if(pref != null && pref.getFoodType() != null) {
             switch (pref.getFoodType()) {
                 case AMERICAN:
                     category = "newamerican, tradamerican";
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-        if(pref.getRestaurantType() != null) {
+        if(pref != null) {
             if (pref.getRestaurantType() == RestaurantType.BAR)
                 params.put("term", pref.getRestaurantType().toString());
             if (pref.getRestaurantType() == RestaurantType.FAST_FOOD)
@@ -192,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
                     for (Business b : searchResponse.getBusinesses()) {
                         //we only want to add about 6 resturants.
                         if (restaurants.size() < 6) {
+                            if(b.getName().equals("Allsups"))
+                                continue;
                             Preferences pref = getCurrentPreference();
                             if(pref != null && pref.getRating() != 0)
                                 if(b.getRating() < pref.getRating()) {
