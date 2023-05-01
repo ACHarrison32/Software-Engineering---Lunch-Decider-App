@@ -232,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(FileManager.currentFilterIndex != selectedItem) {
-                    if(FileManager.currentFilterIndex != 0) {
                         System.out.println("filter index changed!");
                         Map<String, String> params = this.makeParameterMap();
                         params.put("latitude", tracker.getLatitude() + "");
@@ -240,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
 //                        params.put("latitude", "33.930828");
 //                        params.put("longitude", "-98.484879");
                         activity.runOnUiThread(() -> this.callYelp(params));
-                    }
                     selectedItem = FileManager.currentFilterIndex;
                 }
             }
@@ -380,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
 
         //determines how much the wheel should spin
         //since the animation only takes 1000ms, more angle means a faster spin
-        int rotateAmount = ((int) (Math.random() * 360) + 720);
+        int rotateAmount = ((int) (Math.random() * 360) + 1080);
         //grab the imageview of our wheel
         ImageView refreshImage = this.findViewById(R.id.imageView2);
         //create a RotateAnimation
@@ -401,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
         anim.setInterpolator(new AccelerateDecelerateInterpolator());
         //how long the animation lasts in ms
         //also determines speed... longer animation, slower spin.
-        anim.setDuration(1000);
+        anim.setDuration(1500);
 
         //needed for the animation to not reset after the spin
         anim.setFillEnabled(true);
@@ -415,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
         Executor executor = command -> new Thread(command).start();
         executor.execute(() -> {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
