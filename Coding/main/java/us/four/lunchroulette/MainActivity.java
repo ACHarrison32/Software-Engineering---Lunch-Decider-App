@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     category = "mexican, brazilian, newmexican, spanish, tex-mex";
                     break;
                 case ASIAN:
-                    category = "asianfusion, cambodian, chinese, indpak, japanese, korean, malaysian, panasian, taiwanese, thai, vietnamese, noodles, ramen, indian";
+                    category = "chinese, japanese, thai, vietnamese, noodles, ramen, indian";
                     break;
                 case VEGETARIAN:
                     category = "vegetarian";
@@ -129,7 +129,10 @@ public class MainActivity extends AppCompatActivity {
             if (pref.getRestaurantType() == RestaurantType.DINER)
                 params.put("term", "Diners");
         }
-        params.put("categories", category);
+        for(String s : category.split(", ")) {
+            params.put("categories", s);
+        }
+
         params.put("sort_by", "best_match");
         return params;
     }
