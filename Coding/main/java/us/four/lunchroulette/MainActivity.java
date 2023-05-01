@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         Map<String, String> params = this.makeParameterMap();
         params.put("latitude", tracker.getLatitude() + "");
         params.put("longitude", tracker.getLongitude() + "");
+//        params.put("latitude", "33.930828");
+//        params.put("longitude", "-98.484879");
         this.callYelp(params);
         findViewById(R.id.button).setOnClickListener(this::filtersButton_Click);
         findViewById(R.id.imageView2).setOnClickListener(this::spin);
@@ -97,16 +99,16 @@ public class MainActivity extends AppCompatActivity {
         if(pref != null && pref.getFoodType() != null) {
             switch (pref.getFoodType()) {
                 case AMERICAN:
-                    category = "newamerican, tradamerican";
+                    category = "newamerican,tradamerican";
                     break;
                 case ITALIAN:
                     category = "italian";
                     break;
                 case MEXICAN:
-                    category = "mexican, brazilian, newmexican, spanish, tex-mex";
+                    category = "mexican,brazilian,newmexican,spanish,tex-mex";
                     break;
                 case ASIAN:
-                    category = "chinese, japanese, thai, vietnamese, noodles, ramen, indian";
+                    category = "chinese,japanese,thai,vietnamese,noodles,ramen,indian";
                     break;
                 case VEGETARIAN:
                     category = "vegetarian";
@@ -129,10 +131,8 @@ public class MainActivity extends AppCompatActivity {
             if (pref.getRestaurantType() == RestaurantType.DINER)
                 params.put("term", "Diners");
         }
-        for(String s : category.split(", ")) {
-            params.put("categories", s);
-        }
 
+        params.put("categories", category);
         params.put("sort_by", "best_match");
         return params;
     }
