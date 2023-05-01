@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(pref != null) {
             if (pref.getRestaurantType() == RestaurantType.BAR)
-                params.put("term", pref.getRestaurantType().toString());
+                params.put("term", "Bar");
             if (pref.getRestaurantType() == RestaurantType.FAST_FOOD)
                 params.put("term", "Fast Food");
             if (pref.getRestaurantType() == RestaurantType.CAFE)
