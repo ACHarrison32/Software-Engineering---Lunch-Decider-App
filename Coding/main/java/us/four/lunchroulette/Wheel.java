@@ -24,7 +24,7 @@ public class Wheel {
     //List of string entries, for the purposes of this app's implementation that means resturants.
     private final String[] entries;
     //The Android Drawable object (image) that this function returns.
-    private Drawable image = null;
+    private Drawable image;
 
     //default constructor, contains the app graphics context and a string list of entries
     public Wheel(Context context, String[] entries) {

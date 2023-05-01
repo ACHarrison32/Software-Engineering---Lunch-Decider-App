@@ -4,11 +4,10 @@ import java.util.NoSuchElementException;
 
 public enum RestaurantType {
     ANY("Any"),
-    SIT_DOWN("Sit-Down"),
     FAST_FOOD("Fast Food"),
-    BUFFET("Buffet"),
-    DRIVE_THRU("Drive Through"),
-    OUTDOORS("Outdoors");
+    BAR("Bar"),
+    CAFE("Cafe"),
+    DINER("Diner");
     private final String type;
 
     RestaurantType(String s) {

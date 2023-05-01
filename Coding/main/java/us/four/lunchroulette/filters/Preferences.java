@@ -25,7 +25,7 @@ public class Preferences {
     }
     public int getDistance() {
         if(filters.get(4).getValue().equals("Any"))
-            return 0;
+            return 16000;
         else
             return Integer.parseInt(String.valueOf(filters.get(4).getValue()));
     }

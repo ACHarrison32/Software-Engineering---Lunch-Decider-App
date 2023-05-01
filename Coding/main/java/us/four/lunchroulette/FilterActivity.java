@@ -70,7 +70,8 @@ public class FilterActivity extends AppCompatActivity {
         spinnerCurrentList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                FilterFactory.currentFilterIndex = spinnerCurrentList.getSelectedItemPosition();
+                FileManager.currentFilterIndex = spinnerCurrentList.getSelectedItemPosition();
+                System.out.println(FileManager.currentFilterIndex);
                 EditText etext = findViewById(R.id.inputText);
                 Preferences filter = getPreferencesList().get(spinnerCurrentList.getSelectedItemPosition());
                 if(filter.getName().equals("Any"))
@@ -99,7 +100,6 @@ public class FilterActivity extends AppCompatActivity {
                 spinner.setSelection(filter.getRating());
                 spinner = spinnerDistance;
                 int[] distances = {0, 1, 5, 10, 15, 20, 25, 50};
-                int selection = 0;
                 for(int d = 0; d < distances.length; d++) {
                     if(filter.getDistance() == distances[d]) {
                         spinner.setSelection(d);
@@ -114,6 +114,8 @@ public class FilterActivity extends AppCompatActivity {
 
             }
         });
+        spinnerCurrentList.setSelection(FileManager.currentFilterIndex);
+        System.out.println(FileManager.currentFilterIndex);
     }
 
     public void deleteFilter(View view) {
@@ -138,16 +140,28 @@ public class FilterActivity extends AppCompatActivity {
             return;
         }
         StringBuilder builder = new StringBuilder();
-        builder.append(spinnerFoodType.getSelectedItem() + "\n");
-        builder.append(spinnerRestaurantType.getSelectedItem() + "\n");
-        builder.append(spinnerPriceRange.getSelectedItem() + "\n");
-        builder.append(spinnerRating.getSelectedItem() + "\n");
+        builder.append(spinnerFoodType.getSelectedItem()).append("\n");
+        builder.append(spinnerRestaurantType.getSelectedItem()).append("\n");
+        builder.append(spinnerPriceRange.getSelectedItem()).append("\n");
+        builder.append(spinnerRating.getSelectedItem()).append("\n");
         if(spinnerDistance.getSelectedItem().toString().split(" ").length <= 1) {
             builder.append("Any");
         } else
             builder.append(spinnerDistance.getSelectedItem().toString().split(" ")[2]);
         List<Filter> filterList = FilterFactory.generateFiltersFromString(builder.toString());
-        preferences.add(new Preferences(filterList, ((EditText) findViewById(R.id.inputText)).getText().toString()));
+        int existingIndex = 0;
+        int i = 0;
+        boolean alreadyExists = false;
+        for(Preferences p : preferences) {
+            if(p.getName().equals(((EditText) findViewById(R.id.inputText)).getText().toString())) {
+                preferences.set(i, new Preferences(filterList, ((EditText) findViewById(R.id.inputText)).getText().toString()));
+                alreadyExists = true;
+                existingIndex = i;
+            }
+            i++;
+        }
+        if(!alreadyExists)
+            preferences.add(new Preferences(filterList, ((EditText) findViewById(R.id.inputText)).getText().toString()));
         populateSpinnerCurrentFilter();
         FileManager fm = new FileManager();
         try {
@@ -155,16 +169,20 @@ public class FilterActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        if(existingIndex != 0) {
+            spinnerCurrentList.setSelection(existingIndex);
+        } else
+            spinnerCurrentList.setSelection(preferences.size()-1);
+        FileManager.currentFilterIndex = spinnerCurrentList.getSelectedItemPosition();
     }
 
     private void populateSpinnerCurrentFilter() {
-        String prefsNames = "";
+        StringBuilder prefsNames = new StringBuilder();
         for(Preferences p : this.preferences) {
-            prefsNames = prefsNames + p.getName() + "\n";
+            prefsNames.append(p.getName()).append("\n");
         }
-        prefsNames = prefsNames.trim();
-        String[] filtersLists = prefsNames.split("\n");
+        prefsNames = new StringBuilder(prefsNames.toString().trim());
+        String[] filtersLists = prefsNames.toString().split("\n");
         ArrayAdapter<String> currentListAdapter = new ArrayAdapter<>(this, R.layout.my_selected_item, filtersLists);
         currentListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCurrentList.setAdapter(currentListAdapter);

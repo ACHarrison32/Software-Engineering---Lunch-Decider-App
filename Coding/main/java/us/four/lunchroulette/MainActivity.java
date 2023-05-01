@@ -1,6 +1,7 @@
 package us.four.lunchroulette;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -40,6 +41,8 @@ import java.util.concurrent.Executor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import us.four.lunchroulette.filters.Preferences;
+import us.four.lunchroulette.filters.RestaurantType;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -58,88 +61,192 @@ public class MainActivity extends AppCompatActivity {
         ImageView wheelImage = findViewById(R.id.imageView2);
         wheelImage.setVisibility(View.INVISIBLE);
 
-        //TODO: Fix android permissions not allowing network by default
-        //List of resturants that will be pulled from Yelp
-        restaurants = new ArrayList<>();
-        //Grab current context so the concurrent part can reference it
-        Context context = this;
-        //instance of Yelp Fusion api factory
-        //MIT license :)
-        YelpFusionApiFactory apiFactory = new YelpFusionApiFactory();
         //Access GPS from the user.
         //TODO: Fallback method if this doesn't work, allow ZIP input
         GPSTracker tracker = new GPSTracker(this);
         if(tracker.canGetLocation) {
+            Map<String, String> params = new HashMap<>();
             tracker.getLocation();
-            try {
-                //This API key is limited in requests per day, but scales in load if we get more users and contact yelp
-                //TODO: Maybe store this key in a file? Or even in a remote server so it can be changed and is harder to datamine
-                YelpFusionApi yelpFusionApi = apiFactory.createAPI("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
-               //HashMap for Yelp parameters
-                Map<String, String> params = new HashMap<>();
-
-                // general placeholder params, good for a default startup screen
-                params.put("radius", "20000");
-                params.put("open_now", "true");
-//                params.put("term", "food");
-                params.put("categories", "restaurants");
-                params.put("sort_by", "rating");
-                params.put("latitude", tracker.getLatitude() + "");
-                params.put("longitude", tracker.getLongitude() + "");
-
-                //For testing, use predefined coords. For production, get user GPS.
-//                params.put("latitude", "33.9788691");
-//                params.put("longitude", "-98.5391547");
-                //call yelp api async (no networking on main thread allowed)
-
-                Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
-                Callback<SearchResponse> callback = new Callback<SearchResponse>() {
-                    @Override
-                    public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
-                        SearchResponse searchResponse = response.body();
-                        List<String> restaurantNames = new ArrayList<>();
-                        for (Business b : searchResponse.getBusinesses()) {
-                            //we only want to add about 6 resturants.
-                            if(restaurants.size() < 6) {
-                                restaurants.add(b);
-                                restaurantNames.add(b.getName());
-                            }
-                        }
-
-
-                        //Get the wheel image view
-                        ImageView wheelImage = findViewById(R.id.imageView2);
-
-                        //string list to appear in the wheel
-                        //can be up to like 10 long, only limited by how many colors you give it
-                        //Any more than 6 and you risk having text spacing issues
-                        String[] namesOfRestaurants = restaurantNames.toArray(new String[0]);
-                        wheelText = restaurantNames.toArray(new String[0]);
-
-                        //create an instance of the wheel object
-                        Wheel wheel = new Wheel(context, namesOfRestaurants);
-                        //set our image displayed to the image made by the wheel class
-                        wheelImage.setImageDrawable(wheel.getImage());
-                        //we only want to show the wheel image after its been created
-                        wheelImage.setVisibility(View.VISIBLE);
+            Preferences pref = this.getCurrentPreference();
+            // general placeholder params, good for a default startup screen
+            if(pref == null) {
+                params.put("radius", "16000");
+            } else {
+                params.put("radius", String.valueOf(pref.getDistance()));
+                if (pref.getPriceRange() != 0) {
+                    //we have to put every price range *up to* the one selected
+                    String priceRange = "";
+                    for (int i = 1; i <= pref.getPriceRange(); i++) {
+                        priceRange = priceRange + i + ", ";
                     }
-
-                    @Override
-                    public void onFailure(Call<SearchResponse> call, Throwable t) {
-                        // HTTP error happened, do something to handle it.
-                    }
-                };
-                call.enqueue(callback);
-            } catch (IOException e) {
-                e.printStackTrace();
+                    priceRange = priceRange.substring(0, priceRange.length() - 2);
+                    System.out.println(priceRange);
+                    params.put("price", priceRange);
+                }
             }
+            params.put("open_now", "true");
+            params.put("categories", "restaurants");
+            params.put("sort_by", "rating");
+            params.put("latitude", tracker.getLatitude() + "");
+            params.put("longitude", tracker.getLongitude() + "");
+            this.callYelp(params);
         }
-
         findViewById(R.id.button).setOnClickListener(this::filtersButton_Click);
         findViewById(R.id.imageView2).setOnClickListener(this::spin);
+        this.runChangedItemScanner(tracker);
     }
 
-    public void deployPopup(View view, String restaurant, Drawable img) {
+    private void runChangedItemScanner(GPSTracker tracker) {
+
+        Executor executor = command -> new Thread(command).start();
+        Activity activity = this;
+        executor.execute(() -> {
+            int selectedItem = FileManager.currentFilterIndex;
+            while(true) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                if(FileManager.currentFilterIndex != selectedItem) {
+                    if(FileManager.currentFilterIndex != 0) {
+                        System.out.println("filter index changed!");
+                        Map<String, String> params = this.makeParameterMap();
+                        params.put("latitude", tracker.getLatitude() + "");
+                        params.put("longitude", tracker.getLongitude() + "");
+                        activity.runOnUiThread(() -> this.callYelp(params));
+                    }
+                    selectedItem = FileManager.currentFilterIndex;
+                }
+            }
+        });
+
+    }
+
+    public Map<String, String> makeParameterMap() {
+        Map<String, String> params = new HashMap<>();
+        Preferences pref = this.getCurrentPreference();
+        if(pref != null)
+            params.put("radius", String.valueOf(pref.getDistance()));
+        else
+            params.put("radius", "16000");
+        if (pref.getPriceRange() != 0) {
+            //we have to put every price range *up to* the one selected
+            String priceRange = "";
+            for (int i = 1; i <= pref.getPriceRange(); i++) {
+                priceRange = priceRange + i + ", ";
+            }
+            priceRange = priceRange.substring(0, priceRange.length() - 2);
+            System.out.println(priceRange + " pricerange");
+            params.put("price", priceRange);
+        }
+        params.put("open_now", "true");
+        String category = "restaurants";
+        System.out.println(pref.getFoodType());
+        switch(pref.getFoodType()) {
+            case AMERICAN: category = "newamerican, tradamerican";
+            break;
+            case ITALIAN: category = "italian";
+            break;
+            case MEXICAN: category = "mexican, brazilian, newmexican, spanish, tex-mex";
+            break;
+            case ASIAN: category = "asianfusion, cambodian, chinese, indpak, japanese, korean, malaysian, panasian, taiwanese, thai, vietnamese";
+            break;
+            case VEGETARIAN: category = "vegetarian";
+            break;
+            case BREAKFAST: category = "breakfast_brunch";
+            break;
+            case BBQ: category = "bbq";
+            break;
+        }
+        if(pref.getRestaurantType() != RestaurantType.ANY)
+            params.put("term", pref.getRestaurantType().toString());
+        params.put("categories", category);
+        params.put("sort_by", "rating");
+        return params;
+    }
+
+    private Preferences getCurrentPreference() {
+        Preferences pref = null;
+        FileManager fm = new FileManager();
+        try {
+            pref = fm.readPrefsFromFile(this).get(FileManager.currentFilterIndex);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return pref;
+    }
+
+    private void setWheel(List<String> restaurantNames, Context context) {
+        //Get the wheel image view
+        ImageView wheelImage = findViewById(R.id.imageView2);
+
+        //string list to appear in the wheel
+        //can be up to like 10 long, only limited by how many colors you give it
+        //Any more than 6 and you risk having text spacing issues
+        String[] namesOfRestaurants = restaurantNames.toArray(new String[0]);
+        System.out.println("changing tha restaurants! ");
+        for(String s : namesOfRestaurants) {
+            System.out.println(s);
+        }
+        wheelText = restaurantNames.toArray(new String[0]);
+
+        //create an instance of the wheel object
+        Wheel wheel = new Wheel(context, namesOfRestaurants);
+        //set our image displayed to the image made by the wheel class
+        wheelImage.setImageDrawable(wheel.getImage());
+        //we only want to show the wheel image after its been created
+        wheelImage.setVisibility(View.VISIBLE);
+    }
+
+    private void callYelp(Map<String, String> params) {
+
+        //List of resturants that will be pulled from Yelp
+        restaurants = new ArrayList<>();
+
+        //instance of Yelp Fusion api factory
+        //MIT license :)
+        YelpFusionApiFactory apiFactory = new YelpFusionApiFactory();
+        try {
+            //This API key is limited in requests per day, but scales in load if we get more users and contact yelp
+            YelpFusionApi yelpFusionApi = apiFactory.createAPI("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
+            //call yelp api async (no networking on main thread allowed)
+
+            //Grab current context so the concurrent part can reference it
+            Context context = this;
+            Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
+            Callback<SearchResponse> callback = new Callback<SearchResponse>() {
+                @Override
+                public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                    SearchResponse searchResponse = response.body();
+                    List<String> restaurantNames = new ArrayList<>();
+                    for (Business b : searchResponse.getBusinesses()) {
+                        //we only want to add about 6 resturants.
+                        if (restaurants.size() < 6) {
+                            Preferences pref = getCurrentPreference();
+                            if(pref != null && pref.getRating() != 0)
+                                if(b.getRating() < pref.getRating())
+                                    continue;
+                            restaurants.add(b);
+                            restaurantNames.add(b.getName());
+                        }
+                    }
+                    setWheel(restaurantNames, context);
+                }
+                @Override
+                public void onFailure(Call<SearchResponse> call, Throwable t) {
+                    // HTTP error happened, do something to handle it.
+                }
+            };
+            call.enqueue(callback);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deployPopup(View view, String restaurant, Drawable img) {
         //search list for restaurant name
         Business business = null;
         for(Business b : restaurants) {
@@ -185,14 +292,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button reroll = popupView.findViewById(R.id.rerollButton);
-        reroll.setOnClickListener(v -> {
-            popupWindow.dismiss();
-        });
+        reroll.setOnClickListener(v -> popupWindow.dismiss());
 
         Business finalBusiness = business;
 
         Button navigate = popupView.findViewById(R.id.navButton);
         navigate.setOnClickListener(v -> {
+            assert finalBusiness != null;
             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                     Uri.parse("geo:0,0?q=" + finalBusiness.getLocation().getAddress1()));
             startActivity(intent);
@@ -205,40 +311,44 @@ public class MainActivity extends AppCompatActivity {
         ImageView b = popupView.findViewById(R.id.restaurantImage);
         //give it a click listener where you write your code
         b.setOnClickListener(v -> {
+            assert finalBusiness != null;
             fillRestaurant(finalBusiness, popupView, img);
+
         });
         b.callOnClick();
     }
 
-    public Drawable getImageFromUrl(String url) {
+    private Drawable getImageFromUrl(String url) {
         try {
             InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
+            return Drawable.createFromStream(is, "src name");
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public void fillRestaurant(Business b, View view, Drawable img) {
+    @SuppressLint("SetTextI18n")
+    private void fillRestaurant(Business b, View view, Drawable img) {
         TextView name = view.findViewById(R.id.nameText);
         TextView rating = view.findViewById(R.id.ratingText);
+        TextView phone = view.findViewById(R.id.phoneText);
+        TextView distance = view.findViewById(R.id.distanceText);
         ImageView image = view.findViewById(R.id.restaurantImage);
         int stars = (int) Math.floor(b.getRating());
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for(int i = 0; i < stars; i++) {
-            s = s + "⭐";
+            s.append("⭐");
         }
-        s = s + " (" + b.getRating() + ")";
-        rating.setText(s);
+        s.append(" (").append(b.getRating()).append(")");
+        rating.setText(s.toString());
         name.setText(b.getName());
         image.setImageDrawable(img);
-
-
+        distance.setText(Math.round(b.getDistance() * 0.0006213712) + " Miles Away");
+        phone.setText(b.getDisplayPhone());
     }
 
-    public void filtersButton_Click(View view) {
+    private void filtersButton_Click(View view) {
 
         Intent intent = new Intent("filters.intent.action.Launch");
         startActivity(intent);
@@ -251,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
     //helps with animation smoothness, wheel spins again from its previous rotation
     private int currentRotation = 0;
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void spin(View view) {
+    private void spin(View view) {
 
 
         //Commented out code was for showing the result of the spin
@@ -313,10 +423,9 @@ public class MainActivity extends AppCompatActivity {
                     business = b;
                 }
             }
+            assert business != null;
             Drawable img = this.getImageFromUrl(business.getImageUrl());
-            activity.runOnUiThread(() -> {
-                deployPopup(view, restaurant, img);
-            });
+            activity.runOnUiThread(() -> deployPopup(view, restaurant, img));
         });
 
 

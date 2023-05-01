@@ -19,7 +19,7 @@ import us.four.lunchroulette.filters.FilterTypeAdapter;
 import us.four.lunchroulette.filters.Preferences;
 
 public class FileManager {
-
+    public static int currentFilterIndex = 0;
     public void writePrefsToFile(Context c, List<Preferences> prefs) throws IOException {
         this.writeToFile(this.serializeToJson(prefs), c);
     }
@@ -50,7 +50,6 @@ public class FileManager {
                 .registerTypeAdapter(Filter.class, new FilterTypeAdapter())
                 .create();
         Type typeOfT = TypeToken.getParameterized(List.class, Preferences.class).getType();
-        List<Preferences> yourClassList = gson.fromJson(jsonString, typeOfT);
-        return yourClassList;
+        return gson.fromJson(jsonString, typeOfT);
     }
 }
