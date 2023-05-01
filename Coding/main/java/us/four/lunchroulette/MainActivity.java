@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     category = "mexican, brazilian, newmexican, spanish, tex-mex";
                     break;
                 case ASIAN:
-                    category = "asianfusion, cambodian, chinese, indpak, japanese, korean, malaysian, panasian, taiwanese, thai, vietnamese, noodles, ramen";
+                    category = "asianfusion, cambodian, chinese, indpak, japanese, korean, malaysian, panasian, taiwanese, thai, vietnamese, noodles, ramen, indian";
                     break;
                 case VEGETARIAN:
                     category = "vegetarian";
