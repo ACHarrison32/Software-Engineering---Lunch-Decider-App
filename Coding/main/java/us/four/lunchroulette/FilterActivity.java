@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -136,7 +137,7 @@ public class FilterActivity extends AppCompatActivity {
 
     public void makeList(View view) {
         if(((EditText) findViewById(R.id.inputText)).getText().toString().equals("")) {
-            //you can't make a list with no name!
+            Toast.makeText(this, "Your list must have a name!", Toast.LENGTH_SHORT).show();
             return;
         }
         StringBuilder builder = new StringBuilder();
