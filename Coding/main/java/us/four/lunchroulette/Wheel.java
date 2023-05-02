@@ -12,6 +12,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
+import com.example.myapplication.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +47,9 @@ public class Wheel {
     //Input: Graphics Context, list of strings.
     //Returns: Drawable of a pie chart
     private Drawable createPieChartDrawable(Context context, String[] strings) {
+        if(strings.length == 0) {
+            return AppCompatResources.getDrawable(context, R.drawable.placeholder_wheel);
+        }
         //sets resolution
         //should be square for this application
         //keep in mind, android will rescale to whatever is set in the activity xml

@@ -100,13 +100,16 @@ public class FilterActivity extends AppCompatActivity {
                 spinner = spinnerRating;
                 spinner.setSelection(filter.getRating());
                 spinner = spinnerDistance;
-                int[] distances = {0, 1, 5, 10, 15, 20, 25, 50};
-                for(int d = 0; d < distances.length; d++) {
-                    if(filter.getDistance() == distances[d]) {
-                        spinner.setSelection(d);
+                int[] distances = {0, 1, 5, 10, 15, 20};
+                if(filter.getFilters().get(4).getValue().equals("Any"))
+                    spinner.setSelection(0);
+                else {
+                    for (int d = 0; d < distances.length; d++) {
+                        if (filter.getDistance() == (int) (distances[d] * 1609.344)) {
+                            spinner.setSelection(d);
+                        }
                     }
                 }
-
 
             }
 

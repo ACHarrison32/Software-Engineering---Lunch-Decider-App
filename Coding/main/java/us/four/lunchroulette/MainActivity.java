@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Can't enable wheel image until after content view is set
         ImageView wheelImage = findViewById(R.id.imageView2);
-        wheelImage.setVisibility(View.INVISIBLE);
+//        wheelImage.setVisibility(View.INVISIBLE);
 
         //Access GPS from the user.
         //TODO: Fallback method if this doesn't work, allow ZIP input
@@ -376,8 +376,8 @@ public class MainActivity extends AppCompatActivity {
         //FOR EXAMPLE: WHICH RESTURANT IS 790 DEGREES OF ROTATION?
 
         String[] roast = wheelText;
-
-
+        if(roast.length == 0)
+            return;
 
         //determines how much the wheel should spin
         //since the animation only takes 1000ms, more angle means a faster spin
