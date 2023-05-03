@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Preferences {
     private final List<Filter> filters;
-    private final String name;
+    private String name;
     public Preferences(List<Filter> filterList, String name) {
         this.filters = filterList;
         this.name = name;
@@ -50,6 +50,9 @@ public class Preferences {
     }
     public String getName() {
         return this.name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

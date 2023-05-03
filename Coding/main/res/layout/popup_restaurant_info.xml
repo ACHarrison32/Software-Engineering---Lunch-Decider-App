@@ -33,7 +33,8 @@
         android:id="@+id/navButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
         android:text="Navigate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurantImage" />
@@ -42,7 +43,8 @@
         android:id="@+id/rerollButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
         android:text="Re-roll!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurantImage" />
@@ -80,4 +82,16 @@
         app:layout_constraintBottom_toTopOf="@+id/restaurantImage"
         app:layout_constraintEnd_toStartOf="@+id/ratingText"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/favSwitch"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Favorite"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/navButton"
+        app:layout_constraintStart_toEndOf="@+id/rerollButton"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

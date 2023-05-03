@@ -62,6 +62,9 @@ public class FilterActivity extends AppCompatActivity {
 
         if (preferences.size() == 0) {
             preferences.add(new Preferences());
+            Preferences favesPref = new Preferences();
+            favesPref.setName("Favorites");
+            preferences.add(favesPref);
         }
         populateSpinnerCurrentFilter();
 
@@ -124,7 +127,7 @@ public class FilterActivity extends AppCompatActivity {
 
     public void deleteFilter(View view) {
         int pos = spinnerCurrentList.getSelectedItemPosition();
-        if(pos > 0) {
+        if(pos > 1) {
             this.preferences.remove(pos);
             populateSpinnerCurrentFilter();
             FileManager fm = new FileManager();
@@ -141,6 +144,10 @@ public class FilterActivity extends AppCompatActivity {
     public void makeList(View view) {
         if(((EditText) findViewById(R.id.inputText)).getText().toString().equals("")) {
             Toast.makeText(this, "Your list must have a name!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(((EditText) findViewById(R.id.inputText)).getText().toString().equals("Favorites")) {
+            Toast.makeText(this, "You Can't Overwrite Favorites!", Toast.LENGTH_SHORT).show();
             return;
         }
         StringBuilder builder = new StringBuilder();

@@ -16,9 +16,11 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,13 +31,16 @@ import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
 import com.yelp.fusion.client.models.SearchResponse;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 import retrofit2.Call;
@@ -48,6 +53,9 @@ import us.four.lunchroulette.filters.RestaurantType;
 public class MainActivity extends AppCompatActivity {
     private String[] wheelText;
     private List<Business> restaurants = null;
+    public Set<Business> favorites = null;
+    public GPSTracker gpsTracker = null;
+    public static MainActivity INSTANCE;
     /*
     * First function that gets called on program entry
     * you can treat this like 'int main()'
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         //Access GPS from the user.
         //TODO: Fallback method if this doesn't work, allow ZIP input
         GPSTracker tracker = new GPSTracker(this);
+        gpsTracker = tracker;
         Map<String, String> params = this.makeParameterMap();
         params.put("latitude", tracker.getLatitude() + "");
         params.put("longitude", tracker.getLongitude() + "");
@@ -71,8 +80,18 @@ public class MainActivity extends AppCompatActivity {
 //        params.put("longitude", "-98.484879");
         this.callYelp(params);
         findViewById(R.id.button).setOnClickListener(this::filtersButton_Click);
+        findViewById(R.id.searchForButton).setOnClickListener(this::searchForButton_Click);
         findViewById(R.id.imageView2).setOnClickListener(this::spin);
         this.runChangedItemScanner(tracker);
+
+        FileManager manager = new FileManager();
+        try {
+            favorites = manager.readFavoritesFromFile(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+            favorites = new HashSet<>();
+        }
+        INSTANCE = this;
     }
 
     public Map<String, String> makeParameterMap() {
@@ -143,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             pref = fm.readPrefsFromFile(this).get(FileManager.currentFilterIndex);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error couldn't read prob didn't exist");
         }
 
         return pref;
@@ -233,15 +252,37 @@ public class MainActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
                 if(FileManager.currentFilterIndex != selectedItem) {
                         System.out.println("filter index changed!");
-                        Map<String, String> params = this.makeParameterMap();
-                        params.put("latitude", tracker.getLatitude() + "");
-                        params.put("longitude", tracker.getLongitude() + "");
+                        if(FileManager.currentFilterIndex == 1) {
+                            System.out.println("favorites detected!");
+                            FileManager manager = new FileManager();
+                            try {
+                                favorites = manager.readFavoritesFromFile(this);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                favorites = new HashSet<>();
+                            }
+                            for(Business b : favorites) {
+                                System.out.println(b.getName() + " fave");
+                            }
+                            restaurants = new ArrayList<>();
+                            List<String> names = new ArrayList<>();
+                            for(Business favorite : this.favorites) {
+                                if(restaurants.size() < 6) {
+                                    restaurants.add(favorite);
+                                    names.add(favorite.getName());
+                                }
+                            }
+                            activity.runOnUiThread(() -> this.setWheel(names, activity));
+                        } else {
+                            Map<String, String> params = this.makeParameterMap();
+                            params.put("latitude", tracker.getLatitude() + "");
+                            params.put("longitude", tracker.getLongitude() + "");
 //                        params.put("latitude", "33.930828");
 //                        params.put("longitude", "-98.484879");
-                        activity.runOnUiThread(() -> this.callYelp(params));
+                            activity.runOnUiThread(() -> this.callYelp(params));
+                        }
                     selectedItem = FileManager.currentFilterIndex;
                 }
             }
@@ -249,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void deployPopup(View view, String restaurant, Drawable img) {
+    public void deployPopup(View view, String restaurant, Drawable img) {
         //search list for restaurant name
         Business business = null;
         for(Business b : restaurants) {
@@ -294,11 +335,36 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        Business finalBusiness = business;
         Button reroll = popupView.findViewById(R.id.rerollButton);
         reroll.setOnClickListener(v -> popupWindow.dismiss());
+        Switch favSwitch = popupView.findViewById(R.id.favSwitch);
+        Context c = this;
+        favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            boolean found = false;
+            Business deleteB = null;
+            for(Business x : favorites) {
+                if(x.getLocation().getAddress1().equals(finalBusiness.getLocation().getAddress1())) {
+                    found = true;
+                    deleteB = x;
+                }
+            }
 
-        Business finalBusiness = business;
-
+            if(isChecked) {
+                if(!found)
+                    favorites.add(finalBusiness);
+            } else {
+                if(found)
+                    favorites.remove(deleteB);
+            }
+            FileManager manager = new FileManager();
+            try {
+                manager.writeFavoritesToFile(c, favorites);
+                System.out.println("write");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         Button navigate = popupView.findViewById(R.id.navButton);
         navigate.setOnClickListener(v -> {
             assert finalBusiness != null;
@@ -314,14 +380,31 @@ public class MainActivity extends AppCompatActivity {
         ImageView b = popupView.findViewById(R.id.restaurantImage);
         //give it a click listener where you write your code
         b.setOnClickListener(v -> {
+            FileManager manager = new FileManager();
+            boolean found = false;
+            try {
+                favorites = manager.readFavoritesFromFile(c);
+                System.out.println("read ");
+                for(Business x : favorites) {
+                    if(x.getLocation().getAddress1().equals(finalBusiness.getLocation().getAddress1())) {
+                        found = true;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(found) {
+                favSwitch.setChecked(true);
+            }
             assert finalBusiness != null;
             fillRestaurant(finalBusiness, popupView, img);
-
         });
         b.callOnClick();
+
+
     }
 
-    private Drawable getImageFromUrl(String url) {
+    public Drawable getImageFromUrl(String url) {
         try {
             InputStream is = (InputStream) new URL(url).getContent();
             return Drawable.createFromStream(is, "src name");
@@ -354,6 +437,14 @@ public class MainActivity extends AppCompatActivity {
     private void filtersButton_Click(View view) {
 
         Intent intent = new Intent("filters.intent.action.Launch");
+        startActivity(intent);
+//        if(filter.getPreferencesList() == null && this.prefs != null) {
+//            filter.setPreferencesList(this.prefs);
+//        }
+    }
+    private void searchForButton_Click(View view) {
+
+        Intent intent = new Intent("search.intent.action.Launch");
         startActivity(intent);
 //        if(filter.getPreferencesList() == null && this.prefs != null) {
 //            filter.setPreferencesList(this.prefs);
