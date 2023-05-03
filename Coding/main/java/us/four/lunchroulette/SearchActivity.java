@@ -93,6 +93,7 @@ public class SearchActivity extends AppCompatActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("radius", "32186");
         params.put("sort_by", "best_match");
+        params.put("categories", "restaurants");
         params.put("term", text.getText().toString());
         params.put("latitude", MainActivity.INSTANCE.gpsTracker.getLatitude() + "");
         params.put("longitude", MainActivity.INSTANCE.gpsTracker.getLongitude() + "");
@@ -174,7 +175,6 @@ public class SearchActivity extends AppCompatActivity {
             if(FileManager.currentFilterIndex == 1) {
                 Executor executor = command -> new Thread(command).start();
                 executor.execute(() -> {
-                    System.out.println("special code :)");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
