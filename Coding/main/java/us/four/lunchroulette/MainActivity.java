@@ -340,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
         reroll.setOnClickListener(v -> popupWindow.dismiss());
         Switch favSwitch = popupView.findViewById(R.id.favSwitch);
         Context c = this;
+        Activity a = this;
         favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             boolean found = false;
             Business deleteB = null;
@@ -354,8 +355,19 @@ public class MainActivity extends AppCompatActivity {
                 if(!found)
                     favorites.add(finalBusiness);
             } else {
-                if(found)
+                if(found) {
+                    System.out.println("delete time");
                     favorites.remove(deleteB);
+                    restaurants = new ArrayList<>();
+                    List<String> names = new ArrayList<>();
+                    for (Business favorite : this.favorites) {
+                        if (restaurants.size() < 6) {
+                            restaurants.add(favorite);
+                            names.add(favorite.getName());
+                        }
+                    }
+                    a.runOnUiThread(() -> this.setWheel(names, a));
+                }
             }
             FileManager manager = new FileManager();
             try {

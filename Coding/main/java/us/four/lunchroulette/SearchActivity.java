@@ -171,6 +171,24 @@ public class SearchActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            if(FileManager.currentFilterIndex == 1) {
+                Executor executor = command -> new Thread(command).start();
+                executor.execute(() -> {
+                    System.out.println("special code :)");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    FileManager.currentFilterIndex = 0;
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    FileManager.currentFilterIndex = 1;
+                });
+            }
         });
         Button navigate = popupView.findViewById(R.id.navButton);
         navigate.setOnClickListener(v -> {

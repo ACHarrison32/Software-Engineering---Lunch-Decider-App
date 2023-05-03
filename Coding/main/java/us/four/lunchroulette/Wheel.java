@@ -90,21 +90,22 @@ public class Wheel {
             paint.setTypeface(Typeface.SANS_SERIF);
             paint.setTextAlign(Paint.Align.CENTER);
             //canvas.drawText(strings[i], 0, height / 9f, paint);
-            if(strings[i].length() > 17) {
+            if(strings[i].length() > 16) {
                 String[] split = strings[i].split(" ");
                 List<String> temp = new ArrayList<>();
                 int index = 0;
                 temp.add("");
                 int lines = 0;
-                for(String s : split) {
-                    if((temp.get(index) + s).length() < (17 - (lines*2))) {
-                        if(lines < 4)
+                if(lines < 4) {
+                    for(String s : split) {
+                        if ((temp.get(index) + s).length() < (16 - (lines * 2))) {
                             temp.set(index, temp.get(index) + " " + s);
-                    } else {
-                        temp.add(s);
-                        index++;
+                        } else {
+                            temp.add(s);
+                            index++;
+                        }
+                        lines++;
                     }
-                    lines++;
                 }
 //                for(int l = 0; l < split.length; l++) {
 //
