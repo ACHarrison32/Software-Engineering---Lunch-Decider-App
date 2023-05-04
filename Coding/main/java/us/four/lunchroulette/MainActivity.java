@@ -8,6 +8,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public GPSTracker gpsTracker = null;
     public static MainActivity INSTANCE;
     /*
-    * First function that gets called on program entry
-    * you can treat this like 'int main()'
+     * First function that gets called on program entry
+     * you can treat this like 'int main()'
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
         if(pref != null && pref.getFoodType() != null) {
             switch (pref.getFoodType()) {
                 case AMERICAN: //To add 2 categories, use ',' delimiter
-                                //This functions as (newamerican || tradamerican)
-                                //and there is no way to do newamerican && tradamerican)
+                    //This functions as (newamerican || tradamerican)
+                    //and there is no way to do newamerican && tradamerican)
                     category = "newamerican,tradamerican";
                     break;
                 case ITALIAN:
@@ -169,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
+        //translate from enum to correct term from yelp api
         if(pref != null) {
             if (pref.getRestaurantType() == RestaurantType.BAR)
                 params.put("term", "Bar");
@@ -179,24 +182,39 @@ public class MainActivity extends AppCompatActivity {
             if (pref.getRestaurantType() == RestaurantType.DINER)
                 params.put("term", "Diners");
         }
-
+        //add result of categories string building
         params.put("categories", category);
+        //sort by best match
         params.put("sort_by", "best_match");
         return params;
     }
 
+    /**
+     * Returns a Preferences object from file
+     * @return
+     */
     private Preferences getCurrentPreference() {
+        //create null preference instance
         Preferences pref = null;
+        //create filemanager instance
         FileManager fm = new FileManager();
         try {
+            //try to read preferences from file
             pref = fm.readPrefsFromFile(this).get(FileManager.currentFilterIndex);
         } catch (Exception e) {
-            System.out.println("Error couldn't read prob didn't exist");
+            //If it errors, it likely just didn't exist.
+            //The method will return null if this happens.
+            System.out.println("Preferences file didn't exist!");
         }
 
         return pref;
     }
 
+    /**
+     * Set wheel image given a list of strings
+     * @param restaurantNames - list of strings of restaurant names
+     * @param context
+     */
     private void setWheel(List<String> restaurantNames, Context context) {
         //Get the wheel image view
         ImageView wheelImage = findViewById(R.id.imageView2);
@@ -205,10 +223,6 @@ public class MainActivity extends AppCompatActivity {
         //can be up to like 10 long, only limited by how many colors you give it
         //Any more than 6 and you risk having text spacing issues
         String[] namesOfRestaurants = restaurantNames.toArray(new String[0]);
-        System.out.println("changing tha restaurants! ");
-        for(String s : namesOfRestaurants) {
-            System.out.println(s);
-        }
         wheelText = restaurantNames.toArray(new String[0]);
 
         //create an instance of the wheel object
@@ -219,6 +233,10 @@ public class MainActivity extends AppCompatActivity {
         wheelImage.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Sends an API call to help, given the param list
+     * @param params
+     */
     private void callYelp(Map<String, String> params) {
 
         //List of resturants that will be pulled from Yelp
@@ -229,33 +247,46 @@ public class MainActivity extends AppCompatActivity {
         YelpFusionApiFactory apiFactory = new YelpFusionApiFactory();
         try {
             //This API key is limited in requests per day, but scales in load if we get more users and contact yelp
-            YelpFusionApi yelpFusionApi = apiFactory.createAPI("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
+            YelpFusionApi yelpFusionApi = apiFactory.createAPI
+                    ("WWc44gE8YXQor0rQC5cuPTmh1R6Bq6fhqMxJXDqxoRlefB-NjmNyOgVjggoq4E7NQ-g5grrk_rYewxMATnO_DkGIfrtfzohzxEL3FfoBZXLREfjnOG4JZGuMDlM0ZHYx");
             //call yelp api async (no networking on main thread allowed)
 
             //Grab current context so the concurrent part can reference it
             Context context = this;
+            //async yelp call commence!
             Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
             Callback<SearchResponse> callback = new Callback<SearchResponse>() {
                 @Override
                 public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                    //get yelp response
                     SearchResponse searchResponse = response.body();
+                    //initialize result names array for wheel text
                     List<String> restaurantNames = new ArrayList<>();
                     for (Business b : searchResponse.getBusinesses()) {
                         //we only want to add about 6 resturants.
                         if (restaurants.size() < 6) {
+                            //We're blacklisting allsups due to a yelp API bug
+                            //Not on us, yelp just thinks an allsups in Arizona
+                            //is only like 10 miles away
                             if(b.getName().equals("Allsups"))
                                 continue;
+                            //grab current perferences
                             Preferences pref = getCurrentPreference();
                             if(pref != null && pref.getRating() != 0)
+                                //if the preferences aren't null
+                                //and the user set a rating
                                 if(b.getRating() < pref.getRating()) {
-                                    System.out.println("skipp because of rating!");
+                                    //then just skip it if the user requirements
+                                    //are more than what the restaurnt has
                                     continue;
                                 }
+                            //add restaurant to global list and local string list
                             restaurants.add(b);
                             restaurantNames.add(b.getName());
 
                         }
                     }
+                    //set wheel with name.
                     setWheel(restaurantNames, context);
                 }
                 @Override
@@ -263,55 +294,67 @@ public class MainActivity extends AppCompatActivity {
                     // HTTP error happened, do something to handle it.
                 }
             };
+            //queue up the async call
             call.enqueue(callback);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * This acts as a listener for when the user
+     * changes the current filter
+     * @param tracker
+     */
     private void runChangedItemScanner(GPSTracker tracker) {
-
+        //run a new thread
         Executor executor = command -> new Thread(command).start();
+        //grab this activity so we can execute some code on ui thread
         Activity activity = this;
         executor.execute(() -> {
             int selectedItem = FileManager.currentFilterIndex;
             while(true) {
+                //we do a busy-wait loop with a 10 tick per second
+                //clock
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                //check if the index changed since the thread last saw
                 if(FileManager.currentFilterIndex != selectedItem) {
-                        System.out.println("filter index changed!");
-                        if(FileManager.currentFilterIndex == 1) {
-                            System.out.println("favorites detected!");
-                            FileManager manager = new FileManager();
-                            try {
-                                favorites = manager.readFavoritesFromFile(this);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                favorites = new HashSet<>();
-                            }
-                            for(Business b : favorites) {
-                                System.out.println(b.getName() + " fave");
-                            }
-                            restaurants = new ArrayList<>();
-                            List<String> names = new ArrayList<>();
-                            for(Business favorite : this.favorites) {
-                                if(restaurants.size() < 6) {
-                                    restaurants.add(favorite);
-                                    names.add(favorite.getName());
-                                }
-                            }
-                            activity.runOnUiThread(() -> this.setWheel(names, activity));
-                        } else {
-                            Map<String, String> params = this.makeParameterMap();
-                            params.put("latitude", tracker.getLatitude() + "");
-                            params.put("longitude", tracker.getLongitude() + "");
-//                        params.put("latitude", "33.930828");
-//                        params.put("longitude", "-98.484879");
-                            activity.runOnUiThread(() -> this.callYelp(params));
+                    //If it changed to a 1, the user selected favorites
+                    if(FileManager.currentFilterIndex == 1) {
+                        //load favorites
+                        FileManager manager = new FileManager();
+                        try {
+                            favorites = manager.readFavoritesFromFile(this);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            favorites = new HashSet<>();
                         }
+                        //Compile the favorites
+                        //into the wheel
+                        //same way the callYelp function does it
+                        restaurants = new ArrayList<>();
+                        List<String> names = new ArrayList<>();
+                        for(Business favorite : this.favorites) {
+                            if(restaurants.size() < 6) {
+                                restaurants.add(favorite);
+                                names.add(favorite.getName());
+                            }
+                        }
+                        //change the wheel on main thread
+                        activity.runOnUiThread(() -> this.setWheel(names, activity));
+                    } else {
+                        //The user didn't select favorites, so
+                        //we make the parameter map accrding to their preferences
+                        Map<String, String> params = this.makeParameterMap();
+                        params.put("latitude", tracker.getLatitude() + "");
+                        params.put("longitude", tracker.getLongitude() + "");
+                        activity.runOnUiThread(() -> this.callYelp(params));
+                    }
+                    //update selected item
                     selectedItem = FileManager.currentFilterIndex;
                 }
             }
@@ -319,6 +362,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Deploys the restaurant popup
+     * @param view
+     * @param restaurant
+     * @param img
+     */
     public void deployPopup(View view, String restaurant, Drawable img) {
         //search list for restaurant name
         Business business = null;
@@ -346,7 +395,8 @@ public class MainActivity extends AppCompatActivity {
         int color = 0xFFFFFFFF;
         TypedValue typedValue = new TypedValue();
         //grab system theme attribute
-        if (this.getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true))
+        if (this.getTheme()
+                .resolveAttribute(android.R.attr.windowBackground, typedValue, true))
         {
             //replace
             color = typedValue.data;
@@ -357,10 +407,11 @@ public class MainActivity extends AppCompatActivity {
         //set elevation controls how big the "shadow" is
         popupWindow.setElevation(20);
 
-       // popupWindow.set
+        // popupWindow.set
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
         // dismiss the popup window when touched
         popupView.setOnTouchListener((v, event) -> {
             view.performClick();
@@ -368,52 +419,66 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-
+        //final instance of buisness for threads to access
         Business finalBusiness = business;
+        //get the "re-roll!" button
         Button reroll = popupView.findViewById(R.id.rerollButton);
+        //if you click re-roll, just dismiss
         reroll.setOnClickListener(v -> popupWindow.dismiss());
+        //grab favorite switch
         Switch favSwitch = popupView.findViewById(R.id.favSwitch);
         Context c = this;
         Activity a = this;
         favSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            //Scan the favorites list to see if its there
             boolean found = false;
             Business deleteB = null;
             for(Business x : favorites) {
-                if(x.getLocation().getAddress1().equals(finalBusiness.getLocation().getAddress1())) {
+                if(x.getLocation().getAddress1()
+                        .equals(finalBusiness.getLocation().getAddress1())) {
+                    //if its there and since this is a checkChangeListener
+                    //that means the user deleted it from the list
                     found = true;
                     deleteB = x;
                 }
             }
-
+            //if the user checked the box
             if(isChecked) {
-                if(!found)
+                //and its not already there
+                if(!found) //add it
                     favorites.add(finalBusiness);
             } else {
+                //otherwise they unchecked it and its in favorites
                 if(found) {
-                    System.out.println("delete time");
+                    //we remove from favorites
                     favorites.remove(deleteB);
+                    //and update the wheel in real time
                     restaurants = new ArrayList<>();
                     List<String> names = new ArrayList<>();
                     for (Business favorite : this.favorites) {
+                        //only grab 6 favorites
                         if (restaurants.size() < 6) {
                             restaurants.add(favorite);
                             names.add(favorite.getName());
                         }
                     }
+                    //set the updated wheel
                     a.runOnUiThread(() -> this.setWheel(names, a));
                 }
             }
+            //write all changes to file
             FileManager manager = new FileManager();
             try {
                 manager.writeFavoritesToFile(c, favorites);
-                System.out.println("write");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
+        //Set code for "navigate" button
         Button navigate = popupView.findViewById(R.id.navButton);
         navigate.setOnClickListener(v -> {
             assert finalBusiness != null;
+            //The url formating was pulled from googles gapps documentation
             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                     Uri.parse("geo:0,0?q=" + finalBusiness.getLocation().getAddress1()));
             startActivity(intent);
@@ -429,22 +494,29 @@ public class MainActivity extends AppCompatActivity {
             FileManager manager = new FileManager();
             boolean found = false;
             try {
+                //read favorites from file
                 favorites = manager.readFavoritesFromFile(c);
-                System.out.println("read ");
                 for(Business x : favorites) {
-                    if(x.getLocation().getAddress1().equals(finalBusiness.getLocation().getAddress1())) {
+                    //see if a business was a favorite
+                    if(x.getLocation().getAddress1()
+                            .equals(finalBusiness.getLocation().getAddress1())) {
                         found = true;
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            //if it was, set its switch to be flipped already
             if(found) {
                 favSwitch.setChecked(true);
             }
+            //fills out information about the business
+            //such as name, rating, image
             assert finalBusiness != null;
             fillRestaurant(finalBusiness, popupView, img);
         });
+        //manually call the onClick button because no other way to instantly
+        //run code on a popup
         b.callOnClick();
 
 
@@ -472,9 +544,9 @@ public class MainActivity extends AppCompatActivity {
      *
      * Adds information to all textViews and ImageView
      *
-     * @param Business b
+     * @param b
      * @param view
-     * @param Drawable img
+     * @param img
      */
     @SuppressLint("SetTextI18n")
     private void fillRestaurant(Business b, View view, Drawable img) {
@@ -498,7 +570,9 @@ public class MainActivity extends AppCompatActivity {
         //the rating text
         rating.setText(s.toString());
         //set the name
-        name.setText(b.getName());
+        name.setText(
+                Html.fromHtml("<a href=\"" + b.getUrl() + "\">" + b.getName() + "</a> "));
+        name.setMovementMethod(LinkMovementMethod.getInstance());
         //set the image
         image.setImageDrawable(img);
         //set the distance, converted from meters to miles
@@ -512,6 +586,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     private void filtersButton_Click(View view) {
+        //intent defined in AndroidManifest.xml
         Intent intent = new Intent("filters.intent.action.Launch");
         startActivity(intent);
     }
@@ -521,6 +596,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     private void searchForButton_Click(View view) {
+        //intent defined in AndroidManifest.xml
         Intent intent = new Intent("search.intent.action.Launch");
         startActivity(intent);
     }
@@ -566,7 +642,9 @@ public class MainActivity extends AppCompatActivity {
         //so we take the ceiling of the result
         //Because we take the ceiling, its possible to get a result like (length + 0.9) which ceils to length + 1
         //That would cause an indexOutOfBounds, so we take the Math.min between the result and the total length
-        int result = Math.min((int) Math.ceil(((segmentLength+(360-currentRotation))) / segmentLength), wheelRestaurantNames.length);
+        int result = Math.min((int) Math.ceil((
+                (segmentLength+(360-currentRotation))) / segmentLength),
+                wheelRestaurantNames.length);
         String restaurant = wheelRestaurantNames[result-1];
 
 

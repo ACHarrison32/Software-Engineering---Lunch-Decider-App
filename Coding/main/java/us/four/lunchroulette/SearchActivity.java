@@ -8,6 +8,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -230,21 +232,34 @@ public class SearchActivity extends AppCompatActivity {
     }
     @SuppressLint("SetTextI18n")
     private void fillRestaurant(Business b, View view, Drawable img) {
+        //get instances of TextViews and ImageView
         TextView name = view.findViewById(R.id.nameText);
         TextView rating = view.findViewById(R.id.ratingText);
         TextView phone = view.findViewById(R.id.phoneText);
         TextView distance = view.findViewById(R.id.distanceText);
         ImageView image = view.findViewById(R.id.restaurantImage);
+
+        //we can't use half of a star currently :(
         int stars = (int) Math.floor(b.getRating());
+
+        //Builds a string of stars for the rating
         StringBuilder s = new StringBuilder();
         for(int i = 0; i < stars; i++) {
             s.append("⭐");
         }
+        //append the decimal value after the emojis
         s.append(" (").append(b.getRating()).append(")");
+        //the rating text
         rating.setText(s.toString());
-        name.setText(b.getName());
+        //set the name
+        name.setText(
+                Html.fromHtml("<a href=\"" + b.getUrl() + "\">" + b.getName() + "</a> "));
+        name.setMovementMethod(LinkMovementMethod.getInstance());
+        //set the image
         image.setImageDrawable(img);
+        //set the distance, converted from meters to miles
         distance.setText(Math.round(b.getDistance() * 0.0006213712) + " Miles Away");
+        //set the phone number
         phone.setText(b.getDisplayPhone());
     }
 }
