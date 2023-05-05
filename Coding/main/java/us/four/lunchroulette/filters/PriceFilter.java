@@ -1,20 +1,27 @@
 package us.four.lunchroulette.filters;
 
-public class PriceFilter implements Filter {
-    String name = "Price";
-    String value;
+// Define a public class named PriceFilter that implements the Filter interface
+public class PriceFilter implements Filter
+{
+    //Variable Declarations
+    String name = "Price";// Initialize the name variable to "Price"
+    String value;// The value variable is initialized in the constructor
+
+    // Define a constructor that takes a String argument valueIn
     public PriceFilter(String valueIn) {
         value = valueIn;
     }
 
+    // Override the getName method from the Filter interface
     @Override
     public String getName() {
-        return name;
+        return name;// Return the name instance variable
     }
 
+    // Override the getValue method from the Filter interface
     @Override
     public String getValue() {
-        return value;
+        return value;// Return the value instance variable
     }
 
 }
