@@ -15,14 +15,14 @@ public class DistanceFilter implements Filter
         value = valueIn;
     }
 
-    // Override the getName method from the Filter interface
+    // getName method from the Filter interface
     // Return the name instance variable
     @Override
     public String getName()
     {
         return name;
     }
-    // Override the getValue method from the Filter interface
+    // getValue method from the Filter interface
     @Override
     public String getValue()
     {

@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 // JsonSerializer and JsonDeserializer interfaces for the Filter class
 public class FilterTypeAdapter implements JsonSerializer<Filter>, JsonDeserializer<Filter>
 {
-    // Override the serialize method from the JsonSerializer interface to serialize a Filter object to JSON
+    // serialize method from the JsonSerializer interface to serialize a Filter object to JSON
     @Override
     public JsonElement serialize(Filter src, Type typeOfSrc, JsonSerializationContext context)
     {
@@ -24,7 +24,7 @@ public class FilterTypeAdapter implements JsonSerializer<Filter>, JsonDeserializ
         jsonObject.add("data", context.serialize(src));
         return jsonObject;
     }
-    // Override the deserialize method from the JsonDeserializer interface to deserialize a Filter object from JSON
+    // deserialize method from the JsonDeserializer interface to deserialize a Filter object from JSON
     @Override
     public Filter deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {
