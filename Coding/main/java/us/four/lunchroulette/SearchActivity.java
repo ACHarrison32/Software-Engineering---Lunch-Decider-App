@@ -164,7 +164,6 @@ public class SearchActivity extends AppCompatActivity {
         popupWindow.setBackgroundDrawable(new ColorDrawable(color));
         popupWindow.setElevation(20);
 
-        // popupWindow.set
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
@@ -208,7 +207,6 @@ public class SearchActivity extends AppCompatActivity {
             FileManager manager = new FileManager();
             try {
                 manager.writeFavoritesToFile(c, MainActivity.INSTANCE.favorites);
-                System.out.println("write");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -262,7 +260,6 @@ public class SearchActivity extends AppCompatActivity {
             boolean found = false;
             try {
                 MainActivity.INSTANCE.favorites = manager.readFavoritesFromFile(c);
-                System.out.println("read ");
                 // Check if the current restaurant is in the list of favorites
                 for(Business x : MainActivity.INSTANCE.favorites) {
                     if(x.getLocation().getAddress1().equals(business.getLocation().getAddress1())) {

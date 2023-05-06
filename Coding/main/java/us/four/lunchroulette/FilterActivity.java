@@ -98,7 +98,6 @@ public class FilterActivity extends AppCompatActivity
             {
                 // Update the current filter index in the FileManager
                 FileManager.currentFilterIndex = spinnerCurrentList.getSelectedItemPosition();
-                System.out.println(FileManager.currentFilterIndex);
 
                 // Set the input text field to display the name of the selected filter
                 EditText etext = findViewById(R.id.inputText);
@@ -160,7 +159,6 @@ public class FilterActivity extends AppCompatActivity
 
         // Set the spinner for the current filter to display the filter at the current filter index in the FileManager
         spinnerCurrentList.setSelection(FileManager.currentFilterIndex);
-        System.out.println(FileManager.currentFilterIndex);
     }
 
     //method that is called when the "delete filter" button is clicked
