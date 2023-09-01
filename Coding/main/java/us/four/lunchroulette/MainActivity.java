@@ -1,13 +1,16 @@
 package us.four.lunchroulette;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -26,6 +29,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.myapplication.R;
 import com.yelp.fusion.client.connection.YelpFusionApi;
@@ -37,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,14 +85,33 @@ public class MainActivity extends AppCompatActivity {
         //can access the location without re-calling
         gpsTracker = tracker;
         //get a list of parameters
-        Map<String, String> params = this.makeParameterMap();
-        //add location
-        params.put("latitude", tracker.getLatitude() + "");
-        params.put("longitude", tracker.getLongitude() + "");
-        //call yelp with those initial params.
-        this.callYelp(params);
-        //call our secondary thread that scans for currentFilter changes
-        this.runChangedItemScanner(tracker);
+        Executor executor = command -> new Thread(command).start();
+        executor.execute(() -> {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            while(true) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    break;
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            Map<String, String> params = this.makeParameterMap();
+            //add location
+            params.put("latitude", tracker.getLatitude() + "");
+            params.put("longitude", tracker.getLongitude() + "");
+            //call yelp with those initial params.
+            System.out.println("Calling Yelp");
+            this.callYelp(params);
+            //call our secondary thread that scans for currentFilter changes
+            this.runChangedItemScanner(tracker);
+        });
         //create a local file manager and read the users favorites from file.
         FileManager manager = new FileManager();
         try {
@@ -149,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
                     //and there is no way to do newamerican && tradamerican)
                     category = "newamerican,tradamerican";
                     break;
+                case BURGER:
+                    category = "burgers";
+                    break;
                 case ITALIAN:
                     //All of these categories were pulled from yelps dev portal
                     category = "italian";
@@ -168,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case BBQ:
                     category = "bbq";
+                    break;
+                case GLUTEN_FREE:
+                    category = "gluten_free";
                     break;
             }
         }

@@ -16,7 +16,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Current Filter:"
-        android:textSize="22sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/list_name"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
         <EditText
             android:id="@+id/inputText"
@@ -55,14 +55,14 @@
             android:ems="10"
             android:hint="@string/hint"
             android:inputType="textPersonName"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/food_type"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
         <Spinner
             android:id="@+id/spinnerFoodType"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restaurant_type"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
         <Spinner
             android:id="@+id/spinnerRestaurantType"
@@ -90,7 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/price_range"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
         <Spinner
             android:id="@+id/spinnerPriceRange"
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rating"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
         <Spinner
             android:id="@+id/spinnerRating"
@@ -119,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/distance"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
         <Spinner
             android:id="@+id/spinnerDistance"
@@ -137,6 +137,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="4dp"
         android:text="Remove Filter"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -147,6 +148,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:text="@string/create_list"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

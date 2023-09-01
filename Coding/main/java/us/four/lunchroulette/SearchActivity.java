@@ -79,6 +79,7 @@ public class SearchActivity extends AppCompatActivity {
                         // Create a new button and set its text to the business name
                         Button button = new Button(c);
                             button.setText(b.getName());
+                            button.setTextSize(12);
                             // Set an OnClickListener for the button that deploys a popup for the selected busines
                             button.setOnClickListener(e -> {
                                 Executor executor = command -> new Thread(command).start();

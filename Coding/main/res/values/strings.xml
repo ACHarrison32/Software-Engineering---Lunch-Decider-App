@@ -20,12 +20,14 @@
     <string-array name="spinner_food_type">
         <item> Any </item>
         <item> American </item>
+        <item> Burger </item>
         <item> Italian </item>
         <item> Mexican </item>
         <item> Asian </item>
         <item> Vegetarian </item>
         <item> Breakfast </item>
         <item> BBQ </item>
+        <item> Gluten Free </item>
     </string-array>
     <string-array name="spinner_restaurant_type">
         <item> Any </item>

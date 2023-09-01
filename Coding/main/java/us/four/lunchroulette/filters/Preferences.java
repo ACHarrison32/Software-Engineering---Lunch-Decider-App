@@ -89,7 +89,8 @@ public class Preferences
     public FoodType getFoodType()
     {
         // Convert string value of food type filter to FoodType enum
-        return FoodType.valueOf(filters.get(0).getValue().toUpperCase());
+
+        return FoodType.valueOf(filters.get(0).getValue().toUpperCase().replaceAll(" ", "_"));
     }
 
     // Getter method for the name of the preferences
