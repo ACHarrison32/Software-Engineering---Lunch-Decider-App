@@ -66,7 +66,7 @@ public class FilterActivity extends AppCompatActivity
         populateSpinnerPriceRange();
         populateSpinnerRating();
         populateSpinnerDistance();
-
+        this.getSupportActionBar().setTitle("Filters");
         // Read user preferences from file and set them as the current preferences
         FileManager fm = new FileManager();
         try {
@@ -247,6 +247,7 @@ public class FilterActivity extends AppCompatActivity
         // Reset the spinner selection and current filter index
         spinnerCurrentList.setSelection(0);
         FileManager.currentFilterIndex = spinnerCurrentList.getSelectedItemPosition();
+        Toast.makeText(this, "Filter Created. You may want to select it now!", Toast.LENGTH_SHORT).show();
     }
 
     // Populates the "Current List" spinner with the names of the available preferences

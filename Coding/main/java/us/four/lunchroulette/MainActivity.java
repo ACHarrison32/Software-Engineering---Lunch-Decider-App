@@ -21,7 +21,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -37,11 +36,9 @@ import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
 import com.yelp.fusion.client.models.SearchResponse;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicReference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,15 +76,18 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.searchForButton).setOnClickListener(this::searchForButton_Click);
         findViewById(R.id.imageView2).setOnClickListener(this::spin);
 
+        this.getSupportActionBar().hide();
+
         //Access GPS from the user.
-        GPSTracker tracker = new GPSTracker(this);
+        Context ct = this;
+        AtomicReference<GPSTracker> tracker = new AtomicReference<>(new GPSTracker(this));
         //set gpsTracker public. Since we have a public instance
         //of the MainActivity, that means other parts of the app
         //can access the location without re-calling
-        gpsTracker = tracker;
         //get a list of parameters
         Executor executor = command -> new Thread(command).start();
         executor.execute(() -> {
+            Looper.prepare();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -94,23 +95,39 @@ public class MainActivity extends AppCompatActivity {
             }
             while(true) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("werg");
+                    tracker.set(new GPSTracker(ct));
                     break;
                 }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
             }
-            Map<String, String> params = this.makeParameterMap();
+
+            GPSTracker werg = tracker.get();
+            //set gpsTracker public. Since we have a public instance
+            //of the MainActivity, that means other parts of the app
+            //can access the location without re-calling
+            gpsTracker = werg;
+            Map<String, String> params;
+
+            werg = gpsTracker;
+            //set gpsTracker public. Since we have a public instance
+            //of the MainActivity, that means other parts of the app
+            //can access the location without re-calling
+            gpsTracker = werg;
+            params = this.makeParameterMap();
             //add location
-            params.put("latitude", tracker.getLatitude() + "");
-            params.put("longitude", tracker.getLongitude() + "");
+            params.put("latitude", werg.getLatitude() + "");
+            params.put("longitude", werg.getLongitude() + "");
+
             //call yelp with those initial params.
             System.out.println("Calling Yelp");
             this.callYelp(params);
             //call our secondary thread that scans for currentFilter changes
-            this.runChangedItemScanner(tracker);
+            this.runChangedItemScanner(werg);
         });
         //create a local file manager and read the users favorites from file.
         FileManager manager = new FileManager();
@@ -214,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         }
         //add result of categories string building
         params.put("categories", category);
+        params.put("term", category);
         //sort by best match
         params.put("sort_by", "best_match");
         return params;

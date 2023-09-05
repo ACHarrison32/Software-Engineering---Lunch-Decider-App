@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lunch Decider</string>
+    <string name="app_name">Lunch Roulette</string>
     <string name="filters_menu">Filters Menu</string>
     <string name="food_type">Food Type</string>
     <string name="restaurant_type">Restaurant Type</string>

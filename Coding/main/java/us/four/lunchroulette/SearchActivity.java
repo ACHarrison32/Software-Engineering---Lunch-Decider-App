@@ -51,6 +51,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         // Set the OnClickListener of the searchButton to the findRestaurants method
         findViewById(R.id.searchButton).setOnClickListener(this::findRestaurants);
+        this.getSupportActionBar().setTitle("Search");
     }
 
     // This method retrieves search results from Yelp Fusion API using parameters in a HashMap
@@ -127,7 +128,7 @@ public class SearchActivity extends AppCompatActivity {
         params.put("term", text.getText().toString());
         params.put("latitude", MainActivity.INSTANCE.gpsTracker.getLatitude() + "");
         params.put("longitude", MainActivity.INSTANCE.gpsTracker.getLongitude() + "");
-        params.put("limit", "11");
+        params.put("limit", "12");
         // Get the LinearLayout object by its ID
         LinearLayout buttonContainer = (LinearLayout) findViewById(R.id.buttonGroup);
         // Remove all views from the LinearLayout
