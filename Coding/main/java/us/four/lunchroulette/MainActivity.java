@@ -30,7 +30,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.example.myapplication.R;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.imageView2).setOnClickListener(this::spin);
 
         this.getSupportActionBar().hide();
-
+        findViewById(R.id.imageView4).setVisibility(View.INVISIBLE);
         //Access GPS from the user.
         Context ct = this;
         AtomicReference<GPSTracker> tracker = new AtomicReference<>(new GPSTracker(this));
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         //can access the location without re-calling
         //get a list of parameters
         Executor executor = command -> new Thread(command).start();
+        MainActivity activity = this;
         executor.execute(() -> {
             Looper.prepare();
             try {
@@ -231,7 +231,10 @@ public class MainActivity extends AppCompatActivity {
         }
         //add result of categories string building
         params.put("categories", category);
-        params.put("term", category);
+        //yelp api sucks :( this helps a little for some categories
+        //burgers legit doesn't work at all without this :(
+        if(category.equals("burgers")  || category.equals("gluten_free") || category.equals("vegetarian"))
+            params.put("term", category);
         //sort by best match
         params.put("sort_by", "best_match");
         return params;
@@ -279,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
         wheelImage.setImageDrawable(wheel.getImage());
         //we only want to show the wheel image after its been created
         wheelImage.setVisibility(View.VISIBLE);
+        findViewById(R.id.imageView4).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -312,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
                     List<String> restaurantNames = new ArrayList<>();
                     for (Business b : searchResponse.getBusinesses()) {
                         //we only want to add about 6 resturants.
-                        if (restaurants.size() < 6) {
+                        if (restaurants.size() < 8) {
                             //We're blacklisting allsups due to a yelp API bug
                             //Not on us, yelp just thinks an allsups in Arizona
                             //is only like 10 miles away
@@ -387,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
                         restaurants = new ArrayList<>();
                         List<String> names = new ArrayList<>();
                         for(Business favorite : this.favorites) {
-                            if(restaurants.size() < 6) {
+                            if(restaurants.size() < 8) {
                                 restaurants.add(favorite);
                                 names.add(favorite.getName());
                             }
@@ -666,7 +670,7 @@ public class MainActivity extends AppCompatActivity {
         String[] wheelRestaurantNames = wheelText;
 
         //Fixes a crash when tapping on a blank wheel
-        if(wheelRestaurantNames.length == 0)
+        if(wheelRestaurantNames == null || wheelRestaurantNames.length == 0)
             return;
 
         //determines how much the wheel should spin

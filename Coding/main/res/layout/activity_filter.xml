@@ -32,8 +32,9 @@
 
     <LinearLayout
         android:id="@+id/linearLayout4"
-        android:layout_width="264dp"
-        android:layout_height="541dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/createList"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,25 +51,25 @@
         <EditText
             android:id="@+id/inputText"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="42dp"
             android:autofillHints="@string/hint"
             android:ems="10"
             android:hint="@string/hint"
             android:inputType="textPersonName"
-            android:textSize="22dp" />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/food_type"
-            android:textSize="22dp" />
+            android:textSize="20dp" />
 
         <Spinner
             android:id="@+id/spinnerFoodType"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
             android:contentDescription="@string/food_type_example" />
 
         <TextView
@@ -76,13 +77,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restaurant_type"
-            android:textSize="22dp" />
+            android:textSize="20dp" />
 
         <Spinner
             android:id="@+id/spinnerRestaurantType"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
             android:contentDescription="@string/restaurant_type_example" />
 
         <TextView
@@ -90,13 +91,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/price_range"
-            android:textSize="22dp" />
+            android:textSize="20dp" />
 
         <Spinner
             android:id="@+id/spinnerPriceRange"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
             android:contentDescription="@string/price_range_example" />
 
         <TextView
@@ -104,13 +105,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rating"
-            android:textSize="22dp" />
+            android:textSize="20dp" />
 
         <Spinner
             android:id="@+id/spinnerRating"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
             android:contentDescription="@string/rating_example" />
 
 
@@ -119,13 +120,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/distance"
-            android:textSize="22dp" />
+            android:textSize="20dp" />
 
         <Spinner
             android:id="@+id/spinnerDistance"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
             android:contentDescription="@string/distance_example" />
 
     </LinearLayout>
@@ -138,6 +139,7 @@
         android:layout_marginBottom="4dp"
         android:text="Remove Filter"
         android:textSize="14dp"
+        android:backgroundTint="@color/purple_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -149,6 +151,7 @@
         android:layout_marginBottom="4dp"
         android:text="@string/create_list"
         android:textSize="14dp"
+        android:backgroundTint="@color/purple_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

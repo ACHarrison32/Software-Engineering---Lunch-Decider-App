@@ -14,15 +14,33 @@ import android.graphics.drawable.Drawable;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
-import com.example.myapplication.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Wheel {
 
     //Default list of colors that will make up each segment of the wheel
-    private final int[] defaultColors = new int[] {0xFFFF7F50, 0xFFFFA500, 0xFFFFC0CB, 0xFFFF1493, 0xFFFF00FF, 0xFF00FFFF, 0xFF00FF7F, 0xFFFFFF00, 0xFFFFD700};
+    private final int[] defaultColors = new int[] {
+            0xfff44336, // Dark Orange
+            0xff323232,
+            0xfff44336, // Dark Orange
+            0xff323232,
+            0xfff44336, // Dark Orange
+            0xff323232,
+            0xfff44336, // Dark Orange
+            0xff323232,
+            0xfff44336, // Dark Orange
+            0xff323232,
+            0xfff44336, // Dark Orange
+            0xff323232,
+            0xfff44336, // Dark Orange
+            0xff323232,
+            0xfff44336, // Dark Orange
+            0xff323232
+
+
+    };
+
     //colors int, may be overridden from defaultColors by another constructor
     private int[] colors = defaultColors;
     //List of string entries, for the purposes of this app's implementation that means resturants.
@@ -87,18 +105,18 @@ public class Wheel {
             Path path = new Path();
             path.addArc(rectF, i * anglePerPartition, anglePerPartition);
             //black text
-            paint.setColor(Color.BLACK);
+            paint.setColor(Color.rgb(245, 245, 245));
             //28 font size
-            paint.setTextSize(28);
+            paint.setTextSize(27);
             //0.15 letter spacing
-            paint.setLetterSpacing(0.15f);
+            paint.setLetterSpacing(0.14f);
             //android default sans serif font
-            paint.setTypeface(Typeface.SANS_SERIF);
+            paint.setTypeface(Typeface.SERIF);
             //align center
             paint.setTextAlign(Paint.Align.CENTER);
             //this 'algorithm' tries to keep multi-word restaurnats within the confines
             //of the 'slice'
-            if(strings[i].length() > 16) {
+            if(strings[i].length() > 14) {
                 //split string by spaces
                 String[] split = strings[i].split(" ");
                 List<String> temp = new ArrayList<>();
@@ -107,11 +125,11 @@ public class Wheel {
                 int lines = 0;
                 for(String s : split) {
                     //loop through words
-                    if(lines < 4) {
+                    if(lines < 5) {
                         //try to limit to 4 lines, cut off otherwise
 
                         //Only add a space if there room for it
-                        if ((temp.get(index) + s).length() < (16 - (lines * 2))) {
+                        if ((temp.get(index) + s).length() < (14 - (lines * 2))) {
                             temp.set(index, temp.get(index) + " " + s);
                         } else {
                             //otherwise add a new line
@@ -125,26 +143,26 @@ public class Wheel {
                 //manually apply the vertical offset
                 //it has to change because of relative stuff with circles
                 int yoff = 0;
-                float hoff = 10f;
+                float hoff = 12f;
                 for(String s : split) {
                     if(yoff == 0)
-                        hoff = 10;
+                        hoff = 12;
                     if(yoff == 1)
-                        hoff = 7;
+                        hoff = 8.2f;
                     if(yoff == 2)
-                        hoff = 5.4f;
+                        hoff = 6.1f;
                     if(yoff == 3)
-                        hoff = 4.4f;
+                        hoff = 5f;
                     if(yoff == 4)
-                        hoff = 3.7f;
+                        hoff = 4f;
                     //Change letter spacing depending on the line
-                    paint.setLetterSpacing((0.15f + (0.12f * yoff)));
+                    paint.setLetterSpacing((0.15f + (0.07f * yoff)));
                     //draw text
                     canvas.drawTextOnPath(s, path, 0, height / hoff, paint);
                     yoff++;
                 }
             } else //if the name isn't too long just draw it on one line
-                canvas.drawTextOnPath(strings[i], path, 0, height / 10f, paint);
+                canvas.drawTextOnPath(strings[i], path, 0, height / 12f, paint);
         }
         //rotate bitmap to make the 1st result near the top
         Bitmap bitmap2 = this.rotateBitmap270(bitmap);

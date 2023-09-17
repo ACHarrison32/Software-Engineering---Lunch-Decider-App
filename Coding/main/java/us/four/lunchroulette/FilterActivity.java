@@ -1,6 +1,10 @@
 package us.four.lunchroulette;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,7 +52,6 @@ public class FilterActivity extends AppCompatActivity
 
         // Set the layout to be displayed
         setContentView(R.layout.activity_filter);
-
         // Find the spinners and buttons in the layout
         spinnerFoodType = findViewById(R.id.spinnerFoodType);
         spinnerRestaurantType = findViewById(R.id.spinnerRestaurantType);
